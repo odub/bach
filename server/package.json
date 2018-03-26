@@ -1,0 +1,8 @@
+{
+  "name": "bach-server",
+  "version": "0.1.0",
+  "main": "index.js",
+  "author": "Oscar Dub <oscardub@gmail.com>",
+  "license": "UNLICENSED",
+  "private": true
+}
