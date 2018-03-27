@@ -4,5 +4,15 @@
   "main": "index.js",
   "author": "Oscar Dub <oscardub@gmail.com>",
   "license": "UNLICENSED",
-  "private": true
+  "private": true,
+  "scripts": {
+    "data:clean": "rm -rf data/*",
+    "data:dl": "svn checkout https://github.com/cuthbertLab/music21/trunk/music21/corpus/bach data/corpusRaw",
+    "data:unzip": "mkdir -p data/corpus/tmp; for i in \"data/corpusRaw/\"*\".mxl\"; do unzip -nd data/corpus/tmp/ $i; mv -fv data/corpus/tmp/*.xml \"$(echo $i | sed s/mxl$/xml/ | sed s/corpusRaw/corpus/)\"; done; rm -rf data/corpus/tmp",
+    "data:jsonify": "mkdir -p data\/corpusJson\/; for f in \"data\/corpus\/\"*\".xml\"; do xml2json $f \"$(echo $f | sed s\/corpus\/corpusJson\/ | sed s\/xml$\/json\/)\"; done",
+    "data": "yarn data:clean && yarn data:dl && yarn data:unzip && yarn data:jsonify"
+  },
+  "devDependencies": {
+    "xml2json-cli": "^1.1.1"
+  }
 }
