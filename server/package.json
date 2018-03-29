@@ -9,12 +9,17 @@
     "data:clean": "rm -rf data/*",
     "data:dl": "svn checkout https://github.com/cuthbertLab/music21/trunk/music21/corpus/bach data/corpusRaw",
     "data:unzip": "mkdir -p data/corpus/tmp; for i in \"data/corpusRaw/\"*\".mxl\"; do unzip -nd data/corpus/tmp/ $i; mv -fv data/corpus/tmp/*.xml \"$(echo $i | sed s/mxl$/xml/ | sed s/corpusRaw/corpus/)\"; done; rm -rf data/corpus/tmp",
-    "data:jsonify": "mkdir -p data\/corpusJson\/; for f in \"data\/corpus\/\"*\".xml\"; do xml2json $f \"$(echo $f | sed s\/corpus\/corpusJson\/ | sed s\/xml$\/json\/)\"; done",
+    "data:jsonify": "mkdir -p data/corpusJson/; for f in \"data/corpus/\"*\".xml\"; do xml2json $f \"$(echo $f | sed s/corpus/corpusJson/ | sed s/xml$/json/)\"; done",
     "data": "yarn data:clean && yarn data:dl && yarn data:unzip && yarn data:jsonify",
     "format": "prettier --config ../.prettierrc \"**/*.js\""
   },
   "devDependencies": {
     "prettier": "^1.11.1",
     "xml2json-cli": "^1.1.1"
+  },
+  "dependencies": {
+    "pg": "^7.4.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.37.5"
   }
 }
