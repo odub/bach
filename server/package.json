@@ -11,7 +11,8 @@
     "data:unzip": "mkdir -p data/corpus/tmp; for i in \"data/corpusRaw/\"*\".mxl\"; do unzip -nd data/corpus/tmp/ $i; mv -fv data/corpus/tmp/*.xml \"$(echo $i | sed s/mxl$/xml/ | sed s/corpusRaw/corpus/)\"; done; rm -rf data/corpus/tmp",
     "data:jsonify": "mkdir -p data/corpusJson/; for f in \"data/corpus/\"*\".xml\"; do xml2json $f \"$(echo $f | sed s/corpus/corpusJson/ | sed s/xml$/json/)\"; done",
     "data": "yarn data:clean && yarn data:dl && yarn data:unzip && yarn data:jsonify",
-    "format": "prettier --config ../.prettierrc \"**/*.js\""
+    "format": "prettier --config ../.prettierrc \"**/*.js\"",
+    "sequelize": "sequelize --config src/config/config.json --migrations-path src/migrations --seeders-path src/seeders --models-path src/models"
   },
   "devDependencies": {
     "prettier": "^1.11.1",
