@@ -18,6 +18,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      timespan: {
+        type: Sequelize.RANGE(Sequelize.INTEGER),
+        allowNull: false,
+      },
       measure: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -30,7 +34,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      data: {
+      parsedXml: {
         type: Sequelize.JSON,
       },
       createdAt: {

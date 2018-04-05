@@ -5,10 +5,11 @@ module.exports = (sequelize, DataTypes) => {
       index: DataTypes.INTEGER,
       duration: DataTypes.INTEGER,
       offset: DataTypes.INTEGER,
+      timespan: DataTypes.RANGE(DataTypes.INTEGER),
       measure: DataTypes.STRING,
       part: DataTypes.STRING,
       source: DataTypes.STRING,
-      data: DataTypes.JSON,
+      parsedXml: DataTypes.JSON,
     },
     {},
   );

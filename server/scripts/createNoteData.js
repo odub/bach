@@ -42,22 +42,28 @@ const extractNoteData = (document, filename) => {
     extractableParts.forEach(part => {
       const contents = measure.parts[part];
       if (!contents) return;
-      contents.forEach((leaf, i, a) => {
-        switch (leaf._class) {
+      contents.forEach((parsedXml, i, a) => {
+        switch (parsedXml._class) {
           case 'Attributes':
-            attributes[part] = { ...attributes[part], ...leaf };
+            attributes[part] = { ...attributes[part], ...parsedXml };
             break;
           case 'Note': {
-            const durationQuarters = leaf.duration / attributes[part].divisions;
+            const durationQuarters =
+              parsedXml.duration / attributes[part].divisions;
             const durationTicks = durationQuarters * TICKS_PER_QUARTER;
+            const index = indexes[part] || 0;
+            const offset = offsets[part] || 0;
+            const timespan = [offset, offset + durationTicks];
+            timespan.inclusive = [true, false];
             const newNote = {
               duration: durationTicks,
               source: filename,
               part: part,
               measure: measure.number,
-              index: indexes[part] || 0,
-              offset: offsets[part] || 0,
-              data: leaf,
+              index,
+              offset,
+              timespan,
+              parsedXml,
             };
             notes.push(newNote);
             offsets[part] = durationTicks + (offsets[part] || 0);
