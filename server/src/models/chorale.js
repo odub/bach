@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     {},
   );
   Chorale.associate = function(models) {
-    Chorale.hasMany(models.Note);
+    Chorale.hasMany(models.Note, { foreignKey: 'source', sourceKey: 'bwv' });
   };
   return Chorale;
 };

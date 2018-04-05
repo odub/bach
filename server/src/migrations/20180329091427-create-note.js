@@ -1,4 +1,3 @@
-'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Notes', {
@@ -20,11 +19,15 @@ module.exports = {
         allowNull: false,
       },
       measure: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       part: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      source: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
       data: {

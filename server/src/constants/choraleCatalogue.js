@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const MUSIC_21_CATALOGUE = `1---||---269---||---Aus meines Herzens Grunde---||---30
 2---||---347---||---Ich dank dir, lieber Herre---||---176
 3---||---153.1---||---Ach Gott, vom Himmel sieh' darein---||---5
@@ -375,11 +377,30 @@ const MUSIC_21_CATALOGUE = `1---||---269---||---Aus meines Herzens Grunde---||--
 370---||---74.8---||---Kommt her zu mir, spricht Gottes Söhn---||---223
 371---||---278---||---Christ lag in Todesbanden---||---39`;
 
-const CATALOGUE_BY_BWV = Object.freeze(
+const CATALOGUE = Object.freeze(
   MUSIC_21_CATALOGUE.split('\n').reduce((acc, line) => {
     const [riemenschneider, bwv, title, kalmus] = line.split('---||---');
     return { ...acc, [bwv]: { riemenschneider, bwv, title, kalmus } };
   }, {}),
 );
 
-export default CATALOGUE_BY_BWV;
+const CATALOGUE_BWVS = Object.keys(CATALOGUE);
+const CATALOGUE_BWVS_SET = new Set(CATALOGUE_BWVS);
+
+const SOURCE_FILES = fs.readdirSync('./data/corpus/');
+const SOURCE_BWVS = SOURCE_FILES.map(f => f.slice(3, -4));
+const SOURCE_BWVS_SET = new Set(SOURCE_BWVS);
+
+const DB_BWVS = CATALOGUE_BWVS.filter(v => SOURCE_BWVS_SET.has(v));
+const MISSING_XML = CATALOGUE_BWVS.filter(v => !SOURCE_BWVS_SET.has(v));
+
+module.exports = {
+  CATALOGUE,
+  CATALOGUE_BWVS,
+  CATALOGUE_BWVS_SET,
+  SOURCE_FILES,
+  SOURCE_BWVS,
+  SOURCE_BWVS_SET,
+  DB_BWVS,
+  MISSING_XML,
+};
