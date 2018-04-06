@@ -23,11 +23,11 @@ module.exports = {
         allowNull: false,
       },
       measure: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       part: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       source: {

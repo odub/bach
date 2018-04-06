@@ -6,12 +6,18 @@ module.exports = (sequelize, DataTypes) => {
       duration: DataTypes.INTEGER,
       offset: DataTypes.INTEGER,
       timespan: DataTypes.RANGE(DataTypes.INTEGER),
-      measure: DataTypes.STRING,
-      part: DataTypes.STRING,
+      measure: DataTypes.INTEGER,
+      part: DataTypes.INTEGER,
       source: DataTypes.STRING,
       parsedXml: DataTypes.JSON,
     },
-    {},
+    {
+      indexes: [
+        {
+          fields: ['source'],
+        },
+      ],
+    },
   );
   Note.associate = function(models) {
     Note.belongsTo(models.Chorale, { foreignKey: 'source', targetKey: 'bwv' });

@@ -1,6 +1,7 @@
 const process = require('process');
 const fs = require('fs');
 const MusicXML = require('musicxml-interfaces');
+const jsonpath = require('jsonpath');
 
 const { TICKS_PER_QUARTER } = require('../src/constants/time');
 const {
@@ -28,19 +29,57 @@ const parseXML = xml => {
   return MusicXML.parseScore(xml);
 };
 
+const extractPartIdMapping = document => {
+  const partObjects = jsonpath.query(
+    document,
+    "$.partList..[?(@._class === 'ScorePart')]",
+  );
+  const partIdMapping = partObjects.reduce((acc, part) => {
+    const id = part.id;
+    const name = part.partName.partName.split(/\v/)[0];
+    switch (name) {
+      case 'Soprano':
+      case 'S.':
+        return { ...acc, [id]: 0 };
+      case 'Alto':
+      case 'A.':
+        return { ...acc, [id]: 1 };
+      case 'Tenor':
+      case 'T.':
+        return { ...acc, [id]: 2 };
+      case 'Bass':
+      case 'B.':
+        return { ...acc, [id]: 3 };
+      default:
+        return acc;
+    }
+  }, {});
+
+  return partIdMapping;
+};
+
 const extractNoteData = (document, filename) => {
-  const extractableParts = document.partList
-    .filter(v => v._class === 'ScorePart')
-    .map(v => v.id);
+  const partIdMapping = extractPartIdMapping(document);
+  const extractableParts = Object.keys(partIdMapping);
 
   let notes = [];
   let attributes = {};
   let offsets = {};
   let indexes = {};
 
+  // Filter out chorales with more or less than 4 parts
+  if (extractableParts.length !== 4) {
+    return [];
+  }
+
   document.measures.forEach(measure => {
+    // Exit measures with non-integer names
+    if (/[^0-9]/.test(measure.number)) return;
+
     extractableParts.forEach(part => {
+      const partId = partIdMapping[part];
       const contents = measure.parts[part];
+      // Exit empty voices
       if (!contents) return;
       contents.forEach((parsedXml, i, a) => {
         switch (parsedXml._class) {
@@ -58,7 +97,7 @@ const extractNoteData = (document, filename) => {
             const newNote = {
               duration: durationTicks,
               source: filename,
-              part: part,
+              part: partId,
               measure: measure.number,
               index,
               offset,

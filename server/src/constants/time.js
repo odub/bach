@@ -1,4 +1,4 @@
-const TICKS_PER_QUARTER = 48;
+const TICKS_PER_QUARTER = 16;
 const TICKS_PER_WHOLE = TICKS_PER_QUARTER * 4;
 
 module.exports = {
