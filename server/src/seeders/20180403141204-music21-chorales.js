@@ -48,14 +48,22 @@ const seedNotes = queryInterface =>
   });
 
 module.exports = {
-  up: (queryInterface, Sequelize, next) => {
-    seedChorales(queryInterface)
-      .then(() => seedNotes(queryInterface))
-      // Sync models to initialize indexes
-      .then(() => models.Note.sync())
-      // Delete Chorales with no associated notes
-      .then(() => queryInterface.sequelize.query(SQL_DELETE_NOTELESS_CHORALES))
-      .then(() => next());
+  up: (queryInterface, Sequelize) => {
+    return (
+      queryInterface.sequelize
+        .query('ALTER TABLE "Notes" DISABLE TRIGGER ALL;')
+        .then(() => seedChorales(queryInterface))
+        .then(() => seedNotes(queryInterface))
+        // Delete Chorales with no associated notes
+        .then(() =>
+          queryInterface.sequelize.query(SQL_DELETE_NOTELESS_CHORALES),
+        )
+        .then(() =>
+          queryInterface.sequelize.query(
+            'ALTER TABLE "Notes" ENABLE TRIGGER ALL;',
+          ),
+        )
+    );
   },
 
   down: (queryInterface, Sequelize) => {

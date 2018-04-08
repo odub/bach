@@ -2,7 +2,10 @@ module.exports = (sequelize, DataTypes) => {
   var Chorale = sequelize.define(
     'Chorale',
     {
-      bwv: DataTypes.STRING,
+      bwv: {
+        type: DataTypes.STRING,
+        unique: true,
+      },
       riemenschneider: DataTypes.INTEGER,
       title: DataTypes.STRING,
       kalmus: DataTypes.INTEGER,

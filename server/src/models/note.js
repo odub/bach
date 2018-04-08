@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
   );
   Note.associate = function(models) {
     Note.belongsTo(models.Chorale, { foreignKey: 'source', targetKey: 'bwv' });
+    Note.belongsTo(models.TieChain, {
+      foreignKey: 'tieChainId',
+      targetKey: 'id',
+    });
   };
   return Note;
 };
