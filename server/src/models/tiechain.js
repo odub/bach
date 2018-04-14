@@ -8,7 +8,17 @@ module.exports = (sequelize, DataTypes) => {
       source: DataTypes.STRING,
       trivial: DataTypes.BOOLEAN,
     },
-    {},
+    {
+      indexes: [
+        {
+          fields: ['source'],
+        },
+        {
+          fields: ['timespan'],
+          using: 'gist',
+        },
+      ],
+    },
   );
   TieChain.associate = function(models) {
     TieChain.hasMany(models.Note, {

@@ -15,7 +15,8 @@
     "data": "yarn data:clean && yarn data:dl && yarn data:unzip && yarn data:seed",
     "format": "prettier --config ../.prettierrc \"**/*.js\"",
     "sequelize": "sequelize --config src/config/config.json --migrations-path src/migrations --seeders-path src/seeders --models-path src/models",
-    "seed": "yarn run sequelize db:drop && yarn run sequelize db:create && yarn run sequelize db:migrate && yarn run sequelize db:seed:all"
+    "seed": "yarn migrate && yarn run sequelize db:seed:all",
+    "migrate": "yarn run sequelize db:drop && yarn run sequelize db:create && yarn run sequelize db:migrate"
   },
   "devDependencies": {
     "jsonpath": "^1.0.0",

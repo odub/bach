@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       measure: DataTypes.INTEGER,
       part: DataTypes.INTEGER,
       source: DataTypes.STRING,
-      parsedXml: DataTypes.JSON,
+      parsedXml: DataTypes.JSONB,
     },
     {
       indexes: [
@@ -24,6 +24,11 @@ module.exports = (sequelize, DataTypes) => {
     Note.belongsTo(models.TieChain, {
       foreignKey: 'tieChainId',
       targetKey: 'id',
+    });
+    Note.belongsToMany(models.Moment, {
+      through: 'MomentNotes',
+      foreignKey: 'noteId',
+      otherKey: 'momentId',
     });
   };
   return Note;
