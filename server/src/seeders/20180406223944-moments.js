@@ -3,23 +3,23 @@ const models = require('../models');
 const SQL_GENERATE_MOMENT_DATA = `
 SELECT
   row_number() OVER (
-    ORDER BY regexp_replace(n.source, '[^0-9\.]', '', 'g')::numeric, n.source, n.offset
+    ORDER BY regexp_replace(t1.source, '[^0-9\.]', '', 'g')::numeric, t1.source, t1.offset
   ) as id,
-  int4range(min(lower(t.timespan)), max(upper(t.timespan)), '[)') as timespan,
-  int4range(max(lower(t.timespan)), min(upper(t.timespan)), '[)') as "timespanUnique",
-  n.source,
+  int4range(min(lower(ts.timespan)), max(upper(ts.timespan)), '[)') as timespan,
+  int4range(max(lower(ts.timespan)), min(upper(ts.timespan)), '[)') as "timespanUnique",
+  t1.source,
   now(),
   now()
-FROM "Notes" n
-JOIN "TieChains" t ON
-  (t.source = n.source) AND
-  (t.timespan @> n.offset) AND
-  ((n."parsedXml"->'ties')::text IS NULL OR
-  (n."parsedXml"->'ties')::text = '[{"type":0}]')
-WHERE
-  (n."parsedXml"->'ties')::text IS NULL OR
-  (n."parsedXml"->'ties')::text = '[{"type":0}]'
-GROUP BY n.id
+FROM (
+  SELECT
+  DISTINCT ON (t.source, t.offset)
+    *
+  FROM "TieChains" t
+) t1
+JOIN "TieChains" ts ON
+  (ts.source = t1.source) AND
+  (ts.timespan @> t1.offset)
+GROUP BY t1.id, t1.source, t1.offset
 `;
 
 const SQL_GENERATE_MOMENTS = `

@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       timespan: DataTypes.RANGE(DataTypes.INTEGER),
       part: DataTypes.INTEGER,
       source: DataTypes.STRING,
-      trivial: DataTypes.BOOLEAN,
+      length: DataTypes.INTEGER,
     },
     {
       indexes: [

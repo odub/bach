@@ -1,38 +1,48 @@
 const models = require('../models');
 
 const SQL_GENERATE_TIE_CHAINS = `
-INSERT INTO "TieChains" ("offset", "source", "part", "timespan", "trivial", "createdAt", "updatedAt", "id")
+INSERT INTO "TieChains" ("offset", "source", "part", "length", "timespan", "createdAt", "updatedAt", "id")
 SELECT
   n.offset,
   n.source,
   n.part,
-  int4range(
+  GREATEST(n."nextTieNum" - n.num, 1) as "length",
+  int4Range(
     n.offset,
-    CASE WHEN min(upper(chain_end.timespan)) IS NULL THEN upper(n.timespan) ELSE min(upper(chain_end.timespan)) END,
+    greatest(
+      lead(n."prevFinish") OVER (ORDER BY n.num),
+      upper(n.timespan)
+    ),
     '[)'
   ) as timespan,
-  CASE WHEN count(chain_end.id) = 0 THEN true ELSE FALSE END as trivial,
   now() as "createdAt",
   now() as "updatedAt",
-  (row_number() OVER (
-    ORDER BY
-      regexp_replace(n.source, '[^0-9\.]', '', 'g')::numeric,
-      n.source,
-      n.offset,
-      n.part
-  ))::integer as id
-FROM "Notes" n
-LEFT OUTER JOIN "Notes" chain_end ON
-  (n."parsedXml"->'ties')::text = '[{"type":0}]' AND
-  (n.source = chain_end.source) AND
-  (n.part = chain_end.part) AND
-  (n.offset < chain_end.offset) AND
-  (chain_end."parsedXml"->'ties') IS NOT NULL AND
-  (chain_end."parsedXml"->'ties')::text LIKE '%"type":1%'
-WHERE
-  (n."parsedXml"->'ties') IS NULL OR
-  (n."parsedXml"->'ties')::text = '[{"type":0}]'
-GROUP BY n.id
+  row_number() OVER () as id
+FROM (
+  SELECT 
+    *,
+    lead(n.num) OVER (ORDER BY n.num) AS "nextTieNum"
+    FROM (
+      SELECT 
+      *,
+      lag(greatest(upper(n.timespan), 0)) OVER (ORDER BY n.num) AS "prevFinish"
+      FROM (
+        SELECT
+          *,
+          row_number() OVER (
+            ORDER BY
+              regexp_replace(n.source, '[^0-9\.]', '', 'g')::numeric,
+              n.source,
+              n.part,
+              n.offset
+          ) as num
+        FROM "Notes" n
+      ) n
+  ) n
+  WHERE
+    (n."parsedXml"->'ties') IS NULL OR
+    (n."parsedXml"->'ties')::text = '[{"type": 0}]'
+) n
 `;
 
 const SQL_UPDATE_NOTES = `
