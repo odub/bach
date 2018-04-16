@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'segmentId',
       sourceKey: 'id',
     });
+    Segment.belongsToMany(models.Analysis, {
+      through: 'SegmentAnalyses',
+      foreignKey: 'segmentId',
+      otherKey: 'analysisId',
+    });
   };
   return Segment;
 };
