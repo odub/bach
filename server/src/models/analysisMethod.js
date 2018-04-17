@@ -13,7 +13,10 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
   AnalysisMethod.associate = function(models) {
-    AnalysisMethod.hasMany(models.Analysis);
+    AnalysisMethod.hasMany(models.Analysis, {
+      foreignKey: 'methodId',
+      sourceKey: 'id',
+    });
   };
   return AnalysisMethod;
 };
