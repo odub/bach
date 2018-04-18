@@ -6,7 +6,12 @@ module.exports = (sequelize, DataTypes) => {
       bass: DataTypes.STRING,
     },
     {
-      indexes: [],
+      indexes: [
+        {
+          unique: true,
+          fields: ['bass', 'key'],
+        },
+      ],
     },
   );
   Analysis.associate = function(models) {
