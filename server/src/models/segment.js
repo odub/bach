@@ -15,14 +15,9 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
   Segment.associate = function(models) {
-    Segment.hasMany(models.Note, {
+    Segment.hasMany(models.Moment, {
       foreignKey: 'segmentId',
       sourceKey: 'id',
-    });
-    Segment.belongsToMany(models.Analysis, {
-      through: 'SegmentAnalyses',
-      foreignKey: 'segmentId',
-      otherKey: 'analysisId',
     });
   };
   return Segment;

@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
   Analysis.associate = function(models) {
-    Analysis.belongsToMany(models.Segment, {
-      through: 'SegmentAnalyses',
+    Analysis.belongsToMany(models.Moment, {
+      through: 'MomentAnalyses',
       foreignKey: 'analysisId',
-      otherKey: 'segmentId',
+      otherKey: 'momentId',
     });
     Analysis.belongsTo(models.AnalysisMethod, {
       foreignKey: 'methodId',

@@ -21,6 +21,15 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'momentId',
       otherKey: 'noteId',
     });
+    Moment.belongsToMany(models.Analysis, {
+      through: 'MomentAnalyses',
+      foreignKey: 'momentId',
+      otherKey: 'analysisId',
+    });
+    Moment.belongsTo(models.Segment, {
+      foreignKey: 'segmentId',
+      targetKey: 'id',
+    });
   };
   return Moment;
 };

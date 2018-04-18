@@ -11,78 +11,78 @@ const { musicXmlParse } = require('../utils/pitch');
 const ANALYSIS_METHODS = [
   {
     id: 1,
-    type: 'END_PITCH',
-    description: 'Pitches at segment end boundary',
+    type: 'PITCH',
+    description: 'Pitches',
   },
   {
     id: 2,
-    type: 'END_PITCH_CLASS',
-    description: 'Pitch classes at segment end boundary',
+    type: 'PITCH_CLASS',
+    description: 'Pitch classes',
   },
   {
     id: 3,
-    type: 'END_INTERVAL_WITH_BASS',
-    description: 'Intervals above bass at segment end boundary',
+    type: 'INTERVAL_WITH_BASS',
+    description: 'Intervals above bass',
   },
   {
     id: 4,
-    type: 'END_INTERVAL_CLASS_WITH_BASS',
-    description: 'Interval classes above bass at segment end boundary',
+    type: 'INTERVAL_CLASS_WITH_BASS',
+    description: 'Interval classes above bass',
   },
   {
     id: 5,
-    type: 'END_INTERVAL_WITH_BASS_PC',
-    description: 'Intervals above bass pitch class at segment end boundary',
+    type: 'INTERVAL_WITH_BASS_PC',
+    description: 'Intervals above bass pitch class',
   },
   {
     id: 6,
-    type: 'END_INTERVAL_CLASS_WITH_BASS_PC',
-    description:
-      'Interval classes above bass pitch class at segment end boundary',
+    type: 'INTERVAL_CLASS_WITH_BASS_PC',
+    description: 'Interval classes above bass pitch class',
   },
   {
     id: 7,
-    type: 'END_INTERVAL',
-    description: 'Intervals at segment end boundary',
+    type: 'INTERVAL',
+    description: 'Intervals',
   },
   {
     id: 8,
-    type: 'END_INTERVAL_CLASS',
-    description: 'Interval classes at segment end boundary',
+    type: 'INTERVAL_CLASS',
+    description: 'Interval classes',
   },
 ];
 
 const SQL_GET_PITCH_DATA = `
 SELECT
-  n."segmentId",
-  array_agg(n.pitch) as pitch
+  "momentId",
+  array_agg(pitch) AS pitch
 FROM (
-  SELECT DISTINCT ON (n."segmentId", n.part)
-    n."segmentId",
+  SELECT DISTINCT ON (m.id, n.part)
+    m.source,
+    m.id as "momentId",
     n.part,
-    n.id,
-    n."parsedXml"->'pitch' as pitch
-  FROM (
-    SELECT
-      *
-    FROM "Notes" n
-    ORDER BY n.offset DESC
-  ) n
-) n GROUP BY n."segmentId";
+    m."timespanUnique",
+    n."parsedXml"->'pitch' AS pitch
+  FROM "Moments" m
+  JOIN "Notes" n ON
+    (n.source = m.source) AND
+    (n.timespan && m."timespanUnique")
+  ORDER BY m.id, n.part
+) n
+GROUP BY n."momentId"
 `;
 
-const SQL_INSERT_SEGMENT_ANALYSES = `
-INSERT INTO "SegmentAnalyses" ("segmentId", "methodId", "analysisId",  "bass")
+const SQL_INSERT_MOMENT_ANALYSES = `
+INSERT INTO "MomentAnalyses" ("momentId", "methodId", "analysisId",  "bass")
 `;
 
 const ANALYSES_FILE = 'data/analyses.txt';
-const SEGMENT_ANALYSES_FILE = 'data/segmentAnalyses.txt';
+const MOMENT_ANALYSES_FILE = 'data/momentAnalyses.txt';
 
 const analysisFile = fs.createWriteStream(ANALYSES_FILE);
-const segmentAnalysisFile = fs.createWriteStream(SEGMENT_ANALYSES_FILE);
-const writeSegmentAnalysis = line =>
+const momentAnalysisFile = fs.createWriteStream(MOMENT_ANALYSES_FILE);
+const writeMomentAnalysis = line =>
   new Promise((resolve, reject) =>
-    segmentAnalysisFile.write(`${JSON.stringify(line)}\n`, 'utf8', resolve),
+    momentAnalysisFile.write(`${JSON.stringify(line)}\n`, 'utf8', resolve),
   );
 
 let overhang = '';
@@ -100,7 +100,7 @@ module.exports = {
       .then(records =>
         Promise.all(
           records.map(record => {
-            const { segmentId } = record;
+            const { momentId } = record;
             const bass = record.pitch.slice(-1)[0];
             const voices = record.pitch.slice(0, -1).reverse();
             const bassPitch = musicXmlParse(bass);
@@ -116,44 +116,44 @@ module.exports = {
                 {
                   key: [bassPitch, ...pitches].join(' '),
                   methodId: 1,
-                  segmentId,
+                  momentId,
                 },
                 {
                   key: [bassPitchClass, ...pitchClasses].join(' '),
                   methodId: 2,
-                  segmentId,
+                  momentId,
                 },
                 {
                   key: `${bassPitch}: ${intervals.join(' ')}`,
                   methodId: 3,
-                  segmentId,
+                  momentId,
                 },
                 {
                   key: `${bassPitch}: ${intervalClasses.join(' ')}`,
                   methodId: 4,
-                  segmentId,
+                  momentId,
                 },
                 {
                   key: `${bassPitchClass}: ${intervals.join(' ')}`,
                   methodId: 5,
-                  segmentId,
+                  momentId,
                 },
                 {
                   key: `${bassPitchClass}: ${intervalClasses.join(' ')}`,
                   methodId: 6,
-                  segmentId,
+                  momentId,
                 },
                 {
                   key: intervals.join(' '),
                   methodId: 7,
-                  segmentId,
+                  momentId,
                 },
                 {
                   key: intervalClasses.join(' '),
                   methodId: 8,
-                  segmentId,
+                  momentId,
                 },
-              ].map(writeSegmentAnalysis),
+              ].map(writeMomentAnalysis),
             );
           }),
         ),
@@ -162,12 +162,12 @@ module.exports = {
         () =>
           new Promise((resolve, reject) => {
             fs
-              .createReadStream(SEGMENT_ANALYSES_FILE)
+              .createReadStream(MOMENT_ANALYSES_FILE)
               .on('data', chunk => {
                 const lines = `${overhang}${chunk.toString()}`.split('\n');
                 overhang = lines.slice(-1)[0];
-                const segmentAnalyses = lines.slice(0, -1);
-                segmentAnalyses.forEach(c => {
+                const momentAnalyses = lines.slice(0, -1);
+                momentAnalyses.forEach(c => {
                   const { key, methodId } = JSON.parse(c);
                   const analysisSignature = `${methodId}:${key}`;
                   if (analysisIds[analysisSignature]) return;
@@ -213,22 +213,22 @@ module.exports = {
             const promises = [];
             let chunk;
             fs
-              .createReadStream(SEGMENT_ANALYSES_FILE)
+              .createReadStream(MOMENT_ANALYSES_FILE)
               .on('data', chunk => {
                 chunk = chunk;
                 const lines = `${overhang}${chunk.toString()}`.split('\n');
                 overhang = lines.slice(-1)[0];
-                const segmentAnalyses = lines.slice(0, -1).map(sa => {
+                const momentAnalyses = lines.slice(0, -1).map(sa => {
                   const parsedSa = JSON.parse(sa);
                   const analysisId =
                     analysisIds[`${parsedSa.methodId}:${parsedSa.key}`];
                   return { analysisId, ...parsedSa };
                 });
                 const query =
-                  'INSERT INTO "SegmentAnalyses" ("segmentId", "analysisId", "createdAt", "updatedAt")\n' +
-                  `VALUES ${segmentAnalyses
+                  'INSERT INTO "MomentAnalyses" ("momentId", "analysisId", "createdAt", "updatedAt")\n' +
+                  `VALUES ${momentAnalyses
                     .map(
-                      sa => `(${sa.segmentId}, ${sa.analysisId}, now(), now())`,
+                      sa => `(${sa.momentId}, ${sa.analysisId}, now(), now())`,
                     )
                     .join(', ')}`;
                 promises.push(queryInterface.sequelize.query(query));

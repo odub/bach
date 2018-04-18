@@ -1,19 +1,19 @@
 const SQL_UPDATE_NOTES = `
-UPDATE "Notes" u
+UPDATE "Moments" u
 SET "segmentId" = sub."segmentId" 
 FROM (
-  SELECT n.id, s.id as "segmentId" 
-  FROM "Notes" n 
+  SELECT m.id, s.id as "segmentId" 
+  FROM "Moments" m 
   JOIN "Segments" s
   ON 
-    (n.source = s.source) AND
-    (n.timespan && s.timespan)
+    (m.source = s.source) AND
+    (m."timespanUnique" && s.timespan)
 ) sub
 WHERE sub.id = u.id
 `;
 
 const SQL_RESET = `
-UPDATE "Notes" SET "segmentId" = NULL
+UPDATE "Moments" SET "segmentId" = NULL
 `;
 
 module.exports = {
