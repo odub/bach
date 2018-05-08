@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
     'Analysis',
     {
       key: DataTypes.STRING,
-      bass: DataTypes.STRING,
     },
     {
       indexes: [
