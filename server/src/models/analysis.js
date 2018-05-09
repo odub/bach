@@ -1,18 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
-  var Analysis = sequelize.define(
-    'Analysis',
-    {
-      key: DataTypes.STRING,
+  var Analysis = sequelize.define('Analysis', {
+    key: {
+      type: DataTypes.STRING,
+      unique: true,
     },
-    {
-      indexes: [
-        {
-          unique: true,
-          fields: ['bass', 'key'],
-        },
-      ],
-    },
-  );
+  });
   Analysis.associate = function(models) {
     Analysis.belongsToMany(models.Moment, {
       through: 'MomentAnalyses',
