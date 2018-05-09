@@ -1,3 +1,7 @@
+const tonal = require('tonal');
+const { musicXmlParse } = require('../utils/pitch');
+const { Note } = require('.');
+
 module.exports = (sequelize, DataTypes) => {
   var Moment = sequelize.define(
     'Moment',
@@ -30,6 +34,17 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'segmentId',
       targetKey: 'id',
     });
+  };
+  Moment.prototype.findBassPitch = function() {
+    return this.getNotes({
+      order: [['part', 'desc']],
+      limit: 1,
+    }).then(ns => musicXmlParse(ns[0].parsedXml.pitch));
+  };
+  Moment.prototype.findTransposition = function(moment) {
+    return Promise.all([this.findBassPitch(), moment.findBassPitch()]).then(
+      ([bass1, bass2]) => tonal.Distance.interval(bass1, bass2),
+    );
   };
   return Moment;
 };

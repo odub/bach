@@ -12,14 +12,20 @@
     "data:seed:chorales": "node scripts/createChoraleData.js > data/chorales.txt && echo \"$(cat ./data/chorales.txt | wc -l) chorales written to disk\" ",
     "data:seed:notes": "node scripts/createNoteData.js > data/notes.txt && echo \"$(cat ./data/notes.txt | wc -l) notes written to disk\"",
     "data:seed": "yarn data:seed:chorales && yarn data:seed:notes",
+    "data:seed:test": "dropdb bach_test || true && createdb -O root -T bach_development bach_test",
     "data": "yarn data:clean && yarn data:dl && yarn data:unzip && yarn data:seed",
     "format": "prettier --config ../.prettierrc \"**/*.js\"",
     "sequelize": "sequelize --config src/config/config.json --migrations-path src/migrations --seeders-path src/seeders --models-path src/models",
-    "seed": "yarn migrate && yarn run sequelize db:seed:all",
-    "migrate": "yarn run sequelize db:drop && yarn run sequelize db:create && yarn run sequelize db:migrate"
+    "seed": "yarn migrate:drop && yarn run sequelize db:seed:all",
+    "migrate:drop": "yarn run sequelize db:drop && yarn run sequelize db:create && yarn run migrate",
+    "migrate": "yarn run sequelize db:migrate",
+    "pretest": "NODE_ENV=test yarn migrate && yarn data:seed:test",
+    "test": "NODE_ENV=test mocha test/**/*.js --exit"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "jsonpath": "^1.0.0",
+    "mocha": "^5.1.1",
     "prettier": "^1.11.1",
     "sequelize-cli": "^4.0.0",
     "xml2json-cli": "^1.1.1"
