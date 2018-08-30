@@ -46,5 +46,31 @@ module.exports = (sequelize, DataTypes) => {
       ([bass1, bass2]) => tonal.Distance.interval(bass1, bass2),
     );
   };
+  Moment.prototype.findTranspositions = function(...moments) {
+    moments.map(m => this.findTransposition(m));
+  };
+  Moment.prototype.findSimilar = function(options = {}) {
+    const defaults = {
+      analysisMethod: 7,
+      includeSelf: false,
+    };
+    const optionsDefaulted = { ...defaults, ...options };
+    const query =
+      'SELECT m.* FROM "Moments" m ' +
+      'JOIN "MomentAnalyses" ma ON (ma."momentId" = :id) ' +
+      'JOIN "Analyses" a ON (a.id = ma."analysisId") AND (a."methodId" = :analysisMethod) ' +
+      'JOIN "MomentAnalyses" similarms ON (a.id = similarms."analysisId") ' +
+      'WHERE m.id = similarms."momentId" ' +
+      (!!optionsDefaulted.includeSelf ? '' : 'AND :id != m.id ');
+    return sequelize.query(query, {
+      type: sequelize.QueryTypes.SELECT,
+      model: Moment,
+      raw: true,
+      replacements: {
+        id: this.id,
+        analysisMethod: optionsDefaulted.analysisMethod,
+      },
+    });
+  };
   return Moment;
 };
