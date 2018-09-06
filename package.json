@@ -1,4 +1,7 @@
 {
-  "workspaces": ["bach-server"],
+  "workspaces": [
+    "bach-server",
+    "bach-client"
+  ],
   "private": true
 }
