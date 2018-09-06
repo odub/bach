@@ -1,0 +1,38 @@
+html {
+  background-color: #f5f5f5;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Futura, sans-serif;
+}
+
+ul {
+  list-style-type: disc;
+  margin: 0 1em;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+select,
+button,
+input {
+  font-family: Futura, sans-serif;
+}
+
+select,
+input[type='text'] {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:focus {
+  outline: none;
+}
