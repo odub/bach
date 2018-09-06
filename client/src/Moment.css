@@ -1,0 +1,16 @@
+.Moment {
+  width: 100px;
+  background-color: white;
+  margin: 25px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 3px;
+  border: solid #e5e5e5 1px;
+  position: relative;
+}
+
+.MomentDebugToggle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
