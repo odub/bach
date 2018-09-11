@@ -1,8 +1,8 @@
 .Moment {
-  width: 100px;
+  width: 10rem;
   background-color: white;
-  margin: 25px;
-  height: 200px;
+  margin: 2.5rem;
+  height: 20rem;
   overflow: hidden;
   border-radius: 3px;
   border: solid #e5e5e5 1px;
