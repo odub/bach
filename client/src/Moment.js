@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './Moment.css';
 
 import { pitchToPosition, musicXmlParse } from './utils/pitch';
+import Staff from './Staff';
+import Note from './Note';
 
 class Moment extends Component {
   state = {
@@ -32,7 +34,11 @@ class Moment extends Component {
               .join('\n')}
           </pre>
         ) : (
-          <span>Hi</span>
+          <Staff>
+            {Array.from({ length: 13 }, (v, i) => (
+              <Note staffOffset={-12 + i * 2} key={i} />
+            ))}
+          </Staff>
         )}
       </div>
     );
