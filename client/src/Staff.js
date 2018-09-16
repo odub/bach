@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './Staff.css';
 
+import { STAFF_LINE_WIDTH } from './constants';
+
 class Staff extends Component {
   render() {
     const { staffLines } = this.props;
@@ -11,8 +13,8 @@ class Staff extends Component {
             <line
               x1="-25"
               x2="25"
-              y1={v * 5}
-              y2={v * 5}
+              y1={v * 0.5 * STAFF_LINE_WIDTH}
+              y2={v * 0.5 * STAFF_LINE_WIDTH}
               key={i}
               className="StaffLine"
             />

@@ -13,6 +13,8 @@ const accidentalToAlteration = acc => {
       return -1;
     case 'bb':
       return -2;
+    default:
+      return null;
   }
 };
 
