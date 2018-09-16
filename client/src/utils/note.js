@@ -25,18 +25,13 @@ const formatNotes = ({ notes, staffExtent }) => {
     const accidental = tkn[1];
     return accidental;
   });
-  const cols = staffOffsets
-    .slice()
-    .sort((a, b) => b - a)
-    .map((_, i, a) => {
-      const o0 = typeof a[i - 1] != 'undefined' ? a[i - 1] : null;
-      const o1 = a[i];
-      const o2 = typeof a[i + 1] != 'undefined' ? a[i + 1] : null;
-      if (o1 % 2 === 0) return 0;
-      if (o0 && o0 - o1 === 1) return 1;
-      if (o2 && o1 - o2 === 1) return 1;
-      return 0;
-    });
+  const staffOffsetsSet = new Set(staffOffsets);
+  const cols = staffOffsets.map(o => {
+    if (o % 2 === 0) return 0;
+    if (staffOffsetsSet.has(o + 1)) return 1;
+    if (staffOffsetsSet.has(o - 1)) return 1;
+    return 0;
+  });
   const width = new Set(cols).size;
   const notesAbove = [];
   const notesBetween = [];
