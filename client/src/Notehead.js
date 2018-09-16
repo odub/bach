@@ -8,7 +8,7 @@ class Note extends Component {
       <g
         className="Note"
         transform={`translate(${(width - 1) * -5 + col * 11.5}, ${staffOffset *
-          5})`}
+          -5})`}
       >
         {/* <line
           x1="-12.5"
