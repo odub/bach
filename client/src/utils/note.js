@@ -15,7 +15,8 @@ const formatNotes = ({ notes, staffExtent }) => {
   const tonalNotes = notes.map(n => parsedXmlToTonal(n.parsedXml.pitch));
   const tokenizedNotes = tonalNotes.map(tn => Note.tokenize(tn));
   const staffOffsets = tokenizedNotes.map((tkn, i, a) => {
-    const [step, accidental, octave] = tkn;
+    const step = tkn[0];
+    const octave = tkn[2];
     const staffStep = stepToStaffStep(step);
     const octaveOffset = octave - MID_C_OCTAVE;
     const staffOffset = staffStep + octaveOffset * NOTE_SPACES_IN_OCTAVE;
@@ -46,21 +47,33 @@ const formatNotes = ({ notes, staffExtent }) => {
   );
   const ledgerLines = {
     above: {
-      number: parseInt(
-        0.5 *
-          (Math.max(...notesAbove.map(i => staffOffsets[i])) - staffExtent[1]),
-      ),
+      number:
+        ledgerLineWidths[0] &&
+        parseInt(
+          0.5 *
+            (Math.max(...notesAbove.map(i => staffOffsets[i])) -
+              staffExtent[1]),
+          10,
+        ),
       width: ledgerLineWidths[0],
     },
     between: {
-      number: new Set(notesBetween.map(i => staffOffsets[i])).has(0) ? 1 : 0,
+      number:
+        ledgerLineWidths[1] &&
+        new Set(notesBetween.map(i => staffOffsets[i])).has(0)
+          ? 1
+          : 0,
       width: ledgerLineWidths[1],
     },
     below: {
-      number: parseInt(
-        0.5 *
-          (staffExtent[0] - Math.min(...notesBelow.map(i => staffOffsets[i]))),
-      ),
+      number:
+        ledgerLineWidths[2] &&
+        parseInt(
+          0.5 *
+            (staffExtent[0] -
+              Math.min(...notesBelow.map(i => staffOffsets[i]))),
+          10,
+        ),
       width: ledgerLineWidths[2],
     },
   };
