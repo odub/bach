@@ -28,9 +28,7 @@ const formatNotes = ({ notes, staffExtent }) => {
   });
   const staffOffsetsSet = new Set(staffOffsets);
   const cols = staffOffsets.map(o => {
-    if (o % 2 === 0) return 0;
-    if (staffOffsetsSet.has(o + 1)) return 1;
-    if (staffOffsetsSet.has(o - 1)) return 1;
+    if (staffOffsetsSet.has(o - 1) && !staffOffsetsSet.has(o - 2)) return 1;
     return 0;
   });
   const width = new Set(cols).size;
