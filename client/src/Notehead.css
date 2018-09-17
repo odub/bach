@@ -1,4 +1,4 @@
-.Notehead {
-  fill: black;
-  transform: rotate(-25deg);
+.Accidental {
+  transform: translate(-20px, 0px);
+  font-size: 24px;
 }

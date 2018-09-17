@@ -4,7 +4,6 @@ import './LedgerLines.css';
 import {
   STAFF_LINE_WIDTH,
   LEDGER_LINE_PADDING,
-  NOTEHEAD_WIDTH,
   NOTEHEAD_COLUMN_WIDTH,
 } from './constants';
 
@@ -20,11 +19,11 @@ class LedgerLines extends Component {
       return {
         x1:
           offset -
-          0.5 * ledgerLines[key].width * NOTEHEAD_WIDTH -
+          0.5 * ledgerLines[key].width * NOTEHEAD_COLUMN_WIDTH -
           LEDGER_LINE_PADDING,
         x2:
           offset +
-          0.5 * ledgerLines[key].width * NOTEHEAD_WIDTH +
+          0.5 * ledgerLines[key].width * NOTEHEAD_COLUMN_WIDTH +
           LEDGER_LINE_PADDING,
       };
     };
