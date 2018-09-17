@@ -1,4 +1,11 @@
+.Staff {
+  font-family: Bravura;
+  font-size: 36px;
+  text-rendering: geometricPrecision;
+  text-anchor: middle;
+}
+
 .StaffLine {
   stroke: #000;
-  stroke-width: 0.8px;
+  stroke-width: 1px;
 }

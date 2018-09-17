@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import './Notehead.css';
 
-import {
-  NOTEHEAD_WIDTH,
-  NOTEHEAD_COLUMN_WIDTH,
-  STAFF_LINE_WIDTH,
-} from './constants';
+import { NOTEHEAD_COLUMN_WIDTH, STAFF_LINE_WIDTH } from './constants';
 
 class Note extends Component {
   render() {
@@ -15,13 +11,7 @@ class Note extends Component {
     const transformY = staffOffset * 0.5 * -STAFF_LINE_WIDTH;
     return (
       <g className="Note" transform={`translate(${transformX}, ${transformY})`}>
-        <ellipse
-          cx="0"
-          cy="0"
-          rx={0.5 * NOTEHEAD_WIDTH}
-          ry={NOTEHEAD_WIDTH / 3}
-          className="Notehead"
-        />
+        <text className="Notehead">{'\uE0A4'}</text>
       </g>
     );
   }

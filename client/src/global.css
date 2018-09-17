@@ -1,3 +1,14 @@
+@font-face {
+  font-family: 'Bravura';
+  font-weight: normal;
+  font-style: normal;
+  src: url(./assets/fonts/bravura.eot);
+  src: url(./assets/fonts/bravura.eot) format('embedded-opentype'),
+    url(./assets/fonts/bravura.woff2) format('woff2'),
+    url(./assets/fonts/bravura.woff) format('woff'),
+    url(./assets/fonts/bravura.svg) format('svg');
+}
+
 html {
   background-color: #f5f5f5;
 }

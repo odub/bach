@@ -4,7 +4,7 @@ export const TEST_MOMENTS = dataContext
   .keys()
   .map((key, i) => dataContext(key));
 
-export const NOTEHEAD_WIDTH = 12;
-export const NOTEHEAD_COLUMN_WIDTH = 11.5;
-export const LEDGER_LINE_PADDING = NOTEHEAD_WIDTH * 0.375;
-export const STAFF_LINE_WIDTH = 10;
+export const BASE_FONT_SIZE = 36;
+export const NOTEHEAD_COLUMN_WIDTH = 12;
+export const LEDGER_LINE_PADDING = NOTEHEAD_COLUMN_WIDTH * 0.35;
+export const STAFF_LINE_WIDTH = 9;
