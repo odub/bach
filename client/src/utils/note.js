@@ -1,6 +1,6 @@
 const Note = require('tonal-note');
 
-const { parsedXmlToTonal } = require('./pitch');
+const { parsedXmlToTonal, accidentalToAlteration } = require('./pitch');
 
 const C_CHAR_CODE = 67;
 const MID_C_OCTAVE = 4;
@@ -26,6 +26,7 @@ const formatNotes = ({ notes, staffExtent }) => {
     const accidental = tkn[1];
     return accidental;
   });
+  const alterations = accidentals.map(accidentalToAlteration);
   const staffOffsetsSet = new Set(staffOffsets);
   const cols = staffOffsets.map(o => {
     if (staffOffsetsSet.has(o - 1) && !staffOffsetsSet.has(o - 2)) return 1;
@@ -82,6 +83,7 @@ const formatNotes = ({ notes, staffExtent }) => {
       note: notes[i],
       staffOffset: staffOffsets[i],
       accidental: accidentals[i],
+      alteration: alterations[i],
       col: cols[i],
     })),
   };
