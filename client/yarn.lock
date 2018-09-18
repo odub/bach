@@ -6651,9 +6651,24 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
 
+tonal-distance@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/tonal-distance/-/tonal-distance-2.0.0.tgz#87608cb8ad514c0006871c6bee5dc695c8df3557"
+  dependencies:
+    tonal-interval "^2.0.0"
+    tonal-note "^2.0.0"
+
+tonal-interval@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/tonal-interval/-/tonal-interval-2.0.0.tgz#ae53389ff0ea6a81b9bf1ca71b110d2c9175c91a"
+
 tonal-note@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/tonal-note/-/tonal-note-1.1.2.tgz#1bf3be3386cae1aea2332efbcf10f0b5602830ec"
+
+tonal-note@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/tonal-note/-/tonal-note-2.0.0.tgz#f2ad20d8451479f678e957a600c50d62c22df0d9"
 
 toposort@^1.0.0:
   version "1.0.7"
