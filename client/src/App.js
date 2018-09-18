@@ -38,8 +38,10 @@ class App extends Component {
           value={this.state.transpose}
           onChange={e => this.setState({ transpose: e.target.value })}
         >
-          {intervals.map(v => (
-            <option value={v}>{v}</option>
+          {intervals.map((v, i) => (
+            <option value={v} key={i}>
+              {v}
+            </option>
           ))}
         </select>
         {TEST_MOMENTS.map((ns, i) => (
