@@ -49,18 +49,30 @@ const ANALYSIS_METHODS = [
     type: 'INTERVAL_CLASS',
     description: 'Interval classes',
   },
+  {
+    id: 9,
+    type: 'INTERVAL_TRANSITION',
+    description: 'Interval transitions from previous moment',
+  },
+  {
+    id: 10,
+    type: 'INTERVAL_TRANSITION_MARKING_HELD_NOTES',
+    description: 'Interval transitions from previous moment marking held notes',
+  },
 ];
 
 const SQL_GET_PITCH_DATA = `
 SELECT
   "momentId",
-  array_agg(pitch) AS pitch
+  array_agg(pitch) AS pitch,
+  array_agg("noteId") AS "noteIds"
 FROM (
   SELECT DISTINCT ON (m.id, n.part)
     m.source,
     m.id as "momentId",
-    n.part,
     m."timespanUnique",
+    n.id as "noteId",
+    n.part,
     n."parsedXml"->'pitch' AS pitch
   FROM "Moments" m
   JOIN "Notes" n ON
@@ -89,6 +101,44 @@ let overhang = '';
 let count = 0;
 const analysisIds = {};
 
+const processMomentRecord = record => {
+  const noteIds = record.noteIds;
+  const momentId = record.momentId;
+  const bass = record.pitch.slice(-1)[0];
+  const voices = record.pitch.slice(0, -1).reverse();
+  const bassPitch = musicXmlParse(bass);
+  const bassPitchClass = tonal.Note.pc(bassPitch);
+  const pitches = voices.map(musicXmlParse);
+  const pitchClasses = pitches.map(tonal.Note.pc);
+  const intervals = pitches.map(p => tonal.Distance.interval(bassPitch, p));
+  const intervalClasses = intervals.map(tonal.Interval.simplify);
+  return {
+    noteIds,
+    momentId,
+    bass,
+    voices,
+    bassPitch,
+    bassPitchClass,
+    pitches,
+    pitchClasses,
+    intervals,
+    intervalClasses,
+  };
+};
+
+const generateIntervalTransition = (r0, r1, options = { markHeld: false }) => {
+  return r0 === null
+    ? ''
+    : [r1.bassPitch, ...r1.pitches]
+        .map((v1, i) => {
+          if (options.markHeld === true && r0.noteIds[i] === r1.noteIds[i])
+            return '.';
+          const v0 = [r0.bassPitch, ...r0.pitches][i];
+          return tonal.Distance.interval(v0, v1);
+        })
+        .join(' ');
+};
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.resolve()
@@ -99,59 +149,63 @@ module.exports = {
       .then(records => records[0])
       .then(records =>
         Promise.all(
-          records.map(record => {
-            const { momentId } = record;
-            const bass = record.pitch.slice(-1)[0];
-            const voices = record.pitch.slice(0, -1).reverse();
-            const bassPitch = musicXmlParse(bass);
-            const bassPitchClass = tonal.Note.pc(bassPitch);
-            const pitches = voices.map(musicXmlParse);
-            const pitchClasses = pitches.map(tonal.Note.pc);
-            const intervals = pitches.map(p =>
-              tonal.Distance.interval(bassPitch, p),
-            );
-            const intervalClasses = intervals.map(tonal.Interval.simplify);
+          records.map((_, i, a) => {
+            const r1 = processMomentRecord(a[i]);
+            const r0 =
+              i - 1 >= 0 && a[i - 1].source === a[i].source
+                ? processMomentRecord(a[i - 1])
+                : null;
             return Promise.all(
               [
                 {
-                  key: [bassPitch, ...pitches].join(' '),
+                  key: [r1.bassPitch, ...r1.pitches].join(' '),
                   methodId: 1,
-                  momentId,
+                  momentId: r1.momentId,
                 },
                 {
-                  key: [bassPitchClass, ...pitchClasses].join(' '),
+                  key: [r1.bassPitchClass, ...r1.pitchClasses].join(' '),
                   methodId: 2,
-                  momentId,
+                  momentId: r1.momentId,
                 },
                 {
-                  key: `${bassPitch}: ${intervals.join(' ')}`,
+                  key: `${r1.bassPitch}: ${r1.intervals.join(' ')}`,
                   methodId: 3,
-                  momentId,
+                  momentId: r1.momentId,
                 },
                 {
-                  key: `${bassPitch}: ${intervalClasses.join(' ')}`,
+                  key: `${r1.bassPitch}: ${r1.intervalClasses.join(' ')}`,
                   methodId: 4,
-                  momentId,
+                  momentId: r1.momentId,
                 },
                 {
-                  key: `${bassPitchClass}: ${intervals.join(' ')}`,
+                  key: `${r1.bassPitchClass}: ${r1.intervals.join(' ')}`,
                   methodId: 5,
-                  momentId,
+                  momentId: r1.momentId,
                 },
                 {
-                  key: `${bassPitchClass}: ${intervalClasses.join(' ')}`,
+                  key: `${r1.bassPitchClass}: ${r1.intervalClasses.join(' ')}`,
                   methodId: 6,
-                  momentId,
+                  momentId: r1.momentId,
                 },
                 {
-                  key: intervals.join(' '),
+                  key: r1.intervals.join(' '),
                   methodId: 7,
-                  momentId,
+                  momentId: r1.momentId,
                 },
                 {
-                  key: intervalClasses.join(' '),
+                  key: r1.intervalClasses.join(' '),
                   methodId: 8,
-                  momentId,
+                  momentId: r1.momentId,
+                },
+                {
+                  key: generateIntervalTransition(r0, r1),
+                  methodId: 9,
+                  momentId: r1.momentId,
+                },
+                {
+                  key: generateIntervalTransition(r0, r1, { markHeld: true }),
+                  methodId: 10,
+                  momentId: r1.momentId,
                 },
               ].map(writeMomentAnalysis),
             );
