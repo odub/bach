@@ -14,8 +14,8 @@ class Staff extends Component {
       >
         {staffLines.map((v, i) => (
           <line
-            x1="-25"
-            x2="25"
+            x1="-30"
+            x2="30"
             y1={v * 0.5 * STAFF_LINE_WIDTH}
             y2={v * 0.5 * STAFF_LINE_WIDTH}
             key={i}
