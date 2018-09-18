@@ -20,7 +20,11 @@ class Accidentals extends Component {
       const glyph = alterationGlyphs[n.alteration];
       if (glyph) {
         const yOffset = -0.5 * n.staffOffset * STAFF_LINE_WIDTH;
-        acc.push(<text transform={`translate(0, ${yOffset})`}>{glyph}</text>);
+        acc.push(
+          <text transform={`translate(0, ${yOffset})`} key={i}>
+            {glyph}
+          </text>,
+        );
       }
       return acc;
     }, []);
