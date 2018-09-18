@@ -1,4 +1,5 @@
 const Note = require('tonal-note');
+const { transpose } = require('tonal-distance');
 
 const { parsedXmlToTonal, accidentalToAlteration } = require('./pitch');
 
@@ -10,10 +11,14 @@ const stepToStaffStep = step =>
   (NOTE_SPACES_IN_OCTAVE + step.toUpperCase().charCodeAt(0) - C_CHAR_CODE) %
   NOTE_SPACES_IN_OCTAVE;
 
-const formatNotes = ({ notes, staffExtent }) => {
+const formatNotes = ({ notes, staffExtent, transposition }) => {
   notes = notes.filter(n => n.parsedXml.pitch);
   const tonalNotes = notes.map(n => parsedXmlToTonal(n.parsedXml.pitch));
-  const tokenizedNotes = tonalNotes.map(tn => Note.tokenize(tn));
+  const transposedTonalNotes =
+    transposition === '1P'
+      ? tonalNotes.slice()
+      : tonalNotes.map(n => transpose(n, transposition));
+  const tokenizedNotes = transposedTonalNotes.map(tn => Note.tokenize(tn));
   const staffOffsets = tokenizedNotes.map((tkn, i, a) => {
     const step = tkn[0];
     const octave = tkn[2];
