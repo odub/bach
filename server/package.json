@@ -18,6 +18,7 @@
     "sequelize": "sequelize --config src/config/config.json --migrations-path src/migrations --seeders-path src/seeders --models-path src/models",
     "seed": "yarn migrate:drop && yarn run sequelize db:seed:all",
     "migrate:drop": "yarn run sequelize db:drop && yarn run sequelize db:create && yarn run migrate",
+    "start": "node ./src/index.js",
     "migrate": "yarn run sequelize db:migrate",
     "pretest": "NODE_ENV=test yarn migrate && yarn data:seed:test",
     "test": "NODE_ENV=test mocha test/**/*.js --exit"
@@ -31,6 +32,9 @@
     "xml2json-cli": "^1.1.1"
   },
   "dependencies": {
+    "express": "^4.16.3",
+    "express-request-id": "^1.4.0",
+    "morgan": "^1.9.1",
     "musicxml-interfaces": "^0.0.20",
     "pg": "^7.4.1",
     "pg-hstore": "^2.3.2",
