@@ -1,7 +1,5 @@
-const express = require('express');
+module.exports = server => {
+  require('./moments')(server);
 
-const routes = express.Router();
-
-routes.get('/', (req, res) => res.send('Hello World!'));
-
-module.exports = server => server.use(routes);
+  return server;
+};
