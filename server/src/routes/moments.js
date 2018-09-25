@@ -5,12 +5,17 @@ const { API_BASE_PATH } = require('../constants/api');
 
 const routes = express.Router();
 
-routes.get('/', (req, res) => res.status(HttpStatus.NOT_IMPLEMENTED).send());
-routes.get('/:momentId{[0-9*]}', (req, res) =>
-  res.status(HttpStatus.NOT_IMPLEMENTED).send(),
+routes.get('/', (request, response) =>
+  response.status(HttpStatus.NOT_IMPLEMENTED).send(),
 );
-routes.get('/suggest', (req, res) =>
-  res.status(HttpStatus.OK).send('Hello world!'),
+routes.get('/:momentId{[0-9*]}', (request, response) =>
+  response.status(HttpStatus.NOT_IMPLEMENTED).send(),
 );
+routes.post('/suggest', (request, response) => {
+  const { pitches } = request.body;
+  console.log(pitches);
+
+  return response.status(HttpStatus.OK).send('Hello world!');
+});
 
 module.exports = server => server.use(`${API_BASE_PATH}/moments`, routes);
