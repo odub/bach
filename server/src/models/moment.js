@@ -21,16 +21,19 @@ module.exports = (sequelize, DataTypes) => {
   );
   Moment.associate = function(models) {
     Moment.belongsToMany(models.Note, {
+      as: 'notes',
       through: 'MomentNotes',
       foreignKey: 'momentId',
       otherKey: 'noteId',
     });
     Moment.belongsToMany(models.Analysis, {
+      as: 'analyses',
       through: 'MomentAnalyses',
       foreignKey: 'momentId',
       otherKey: 'analysisId',
     });
     Moment.belongsTo(models.Segment, {
+      as: 'segment',
       foreignKey: 'segmentId',
       targetKey: 'id',
     });
