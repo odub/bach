@@ -3,3 +3,4 @@ data*/
 yarn-error.log
 dump
 .prettierignore
+dbConfig.json

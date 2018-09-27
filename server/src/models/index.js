@@ -7,13 +7,16 @@ var config = require(__dirname + '/../configuration')[env];
 var db = {};
 
 if (config.use_env_variable) {
-  var sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  var sequelize = new Sequelize(
+    process.env[config.use_env_variable],
+    config.db,
+  );
 } else {
   var sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config,
+    config.db.database,
+    config.db.username,
+    config.db.password,
+    config.db,
   );
 }
 
