@@ -1,5 +1,6 @@
 module.exports = server => {
-  require('./moments')(server);
+  require('./moment')(server);
+  require('./analysis')(server);
 
   return server;
 };
