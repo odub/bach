@@ -1,3 +1,10 @@
+const LOCAL_ORIGIN_MATCHER = new RegExp(
+  '^https?://(localhost|127\\.0\\.0\\.1|.*\\.local)(:[\\d]+)?(/|$)',
+);
+const CORS_ORIGIN_REGEX = process.env.CORS_ORIGIN_MATCHER
+  ? new RegExp(process.env.CORS_ORIGIN_MATCHER)
+  : false;
+
 module.exports = {
   development: {
     db: {
@@ -6,6 +13,10 @@ module.exports = {
       database: 'bach_development',
       host: '127.0.0.1',
       dialect: 'postgres',
+    },
+    cors: {
+      credentials: true,
+      origin: LOCAL_ORIGIN_MATCHER,
     },
     port: 4000,
   },
@@ -18,6 +29,10 @@ module.exports = {
       dialect: 'postgres',
       logging: false,
     },
+    cors: {
+      credentials: true,
+      origin: LOCAL_ORIGIN_MATCHER,
+    },
     port: 4001,
   },
   production: {
@@ -27,6 +42,10 @@ module.exports = {
       database: 'bach_production',
       host: '127.0.0.1',
       dialect: 'postgres',
+    },
+    cors: {
+      credentials: true,
+      origin: CORS_ORIGIN_REGEX,
     },
     port: 8000,
   },
