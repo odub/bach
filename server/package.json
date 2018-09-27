@@ -6,6 +6,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
+    "config:gen": "node scripts/generateDbConfig.js > dbConfig.json",
     "data:clean": "rm -rf data/*",
     "data:dl": "svn checkout https://github.com/cuthbertLab/music21/trunk/music21/corpus/bach data/corpusRaw",
     "data:unzip": "mkdir -p data/corpus/tmp; for i in \"data/corpusRaw/\"*\".mxl\"; do unzip -nd data/corpus/tmp/ $i; mv -fv data/corpus/tmp/*.xml \"$(echo $i | sed s/mxl$/xml/ | sed s/corpusRaw/corpus/)\"; done; rm -rf data/corpus/tmp",
@@ -15,7 +16,7 @@
     "data:seed:test": "dropdb bach_test || true && createdb -O root -T bach_development bach_test",
     "data": "yarn data:clean && yarn data:dl && yarn data:unzip && yarn data:seed",
     "format": "prettier --config ../.prettierrc \"**/*.js\"",
-    "sequelize": "sequelize --config src/config/config.json --migrations-path src/migrations --seeders-path src/seeders --models-path src/models",
+    "sequelize": "yarn config:gen && sequelize --config dbConfig.json --migrations-path src/migrations --seeders-path src/seeders --models-path src/models",
     "seed": "yarn migrate:drop && yarn run sequelize db:seed:all",
     "migrate:drop": "yarn run sequelize db:drop && yarn run sequelize db:create && yarn run migrate",
     "start": "node ./src/index.js",
