@@ -11,11 +11,5 @@ routes.get('/', (request, response) =>
 routes.get('/:momentId{[0-9*]}', (request, response) =>
   response.status(HttpStatus.NOT_IMPLEMENTED).send(),
 );
-routes.post('/suggest', (request, response) => {
-  const { pitches } = request.body;
-  console.log(pitches);
-
-  return response.status(HttpStatus.OK).send('Hello world!');
-});
 
 module.exports = server => server.use(`${API_BASE_PATH}/moments`, routes);
