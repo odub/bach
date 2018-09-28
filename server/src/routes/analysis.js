@@ -7,9 +7,9 @@ const models = require('../models');
 const routes = express.Router();
 
 routes.post('/continuations/suggest', (request, response) => {
-  const { noteNumbers } = request.body;
+  const { pitches } = request.body;
 
-  models.Analysis.findContinuations({ noteNumbers }).then(result => {
+  models.Analysis.findContinuations({ pitches }).then(result => {
     const { searchKey, continuations } = result;
     return response
       .status(HttpStatus.OK)

@@ -18,11 +18,10 @@ module.exports = (sequelize, DataTypes) => {
       targetKey: 'id',
     });
   };
-  Analysis.findContinuations = function(options = { noteNumbers: [] }) {
-    const { noteNumbers } = options;
-    const sciPitches = noteNumbers.map(tonal.Note.fromMidi);
-    const [bass, ...pitches] = sciPitches;
-    const intervals = pitches.map(p => tonal.Distance.interval(bass, p));
+  Analysis.findContinuations = function(options = { pitches: [] }) {
+    const { pitches } = options;
+    const [bass, ...otherVoices] = pitches;
+    const intervals = otherVoices.map(p => tonal.Distance.interval(bass, p));
     const analysisString = intervals.join(' ');
     const query = [
       'SELECT',
