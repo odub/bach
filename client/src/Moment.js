@@ -21,12 +21,6 @@ class Moment extends Component {
 
     return (
       <div className="Moment">
-        <a
-          className="MomentDebugToggle"
-          onClick={() => console.info({ notes, ledgerLines })}
-        >
-          src
-        </a>
         <Staff staffLines={STAFF_LINES}>
           {notes.map((n, i) => (
             <Notehead {...n} width={width} key={i} />
