@@ -1,4 +1,4 @@
-const dataContext = require.context('./data', true, /\.json/);
+const dataContext = require.context('./data', true, /[0-9]+\.json/);
 
 const glyphNames = require('./assets/fonts/metadata/glyphNames.json');
 
