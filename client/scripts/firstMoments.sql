@@ -1,7 +1,7 @@
 \t on
 \a
 WITH output as (
-  SELECT array_agg(n."parsedXml"->'pitch') AS notes FROM (
+  SELECT array_agg(n."parsedXml"->'pitch' ORDER BY n.part DESC) AS notes FROM (
     SELECT
       DISTINCT m.source,
       min(m.id) OVER (PARTITION BY m.source) AS id

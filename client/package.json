@@ -16,7 +16,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "generateMomentJSON": "mkdir -p src/data; for i in $(seq 0 9); do psql -d bach_development -qf scripts/generateMomentJSON.sql > src/data/$i.json; done",
-    "generateStartPoints": "mkdir -p src/data; psql -d bach_development -qf scripts/firstMoments.sql > /tmp/startPoints && node scripts/generateStartPoints.js > ../data/startPoints.json"
+    "generateStartPoints": "mkdir -p src/data; psql -d bach_development -qf scripts/firstMoments.sql > /tmp/startPoints && node scripts/generateStartPoints.js > src/data/startPoints.json"
   },
   "devDependencies": {}
 }
