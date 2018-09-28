@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 import Moment from './Moment';
-import { TEST_MOMENTS } from './constants';
+import { TEST_MOMENTS, START_POINTS } from './constants';
 
 import './milligram.css';
 import './global.css';
@@ -29,7 +29,29 @@ const intervals = [
 class App extends Component {
   state = {
     transpose: '1P',
+    chord: null,
+    suggestions: [],
   };
+  componentDidMount() {
+    this.onChordChanged(
+      START_POINTS[Math.floor(START_POINTS.length * Math.random())],
+    );
+  }
+  onChordChanged(chord) {
+    this.setState({ chord, suggestions: [] });
+    fetch('http://localhost:4000/api/v1/analyses/continuations/suggest/', {
+      method: 'POST',
+      body: JSON.stringify({ pitches: chord }),
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    })
+      .then(response => response.json())
+      .then(result =>
+        this.setState({ suggestions: console.log(result.data) || result.data }),
+      )
+      .then(console.log);
+  }
   render() {
     return (
       <div className="App">
@@ -44,9 +66,25 @@ class App extends Component {
             </option>
           ))}
         </select>
-        {TEST_MOMENTS.map((ns, i) => (
-          <Moment key={i} notes={ns} transpose={this.state.transpose} />
-        ))}
+        <div className="MomentWrapper">
+          <div className="CurrentMoment">
+            <Moment
+              pitches={this.state.chord}
+              transpose={this.state.transpose}
+            />
+          </div>
+          <div className="Suggestions">
+            {this.state.suggestions.map((s, i) => (
+              <Moment
+                key={i}
+                pitches={this.state.chord}
+                transpose={this.state.transpose}
+                voiceTranspositions={s.continuation}
+                count={s.count}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     );
   }

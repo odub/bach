@@ -11,13 +11,30 @@ const stepToStaffStep = step =>
   (NOTE_SPACES_IN_OCTAVE + step.toUpperCase().charCodeAt(0) - C_CHAR_CODE) %
   NOTE_SPACES_IN_OCTAVE;
 
-const formatNotes = ({ notes, staffExtent, transposition }) => {
+const formatNotes = ({
+  notes = [],
+  staffExtent,
+  transposition,
+  pitches,
+  voiceTranspositions,
+}) => {
   notes = notes.filter(n => n.parsedXml.pitch);
-  const tonalNotes = notes.map(n => parsedXmlToTonal(n.parsedXml.pitch));
-  const transposedTonalNotes =
+  let tonalNotes;
+  if (notes.length) {
+    tonalNotes = notes.map(n => parsedXmlToTonal(n.parsedXml.pitch));
+  } else if (pitches && pitches.length) {
+    tonalNotes = pitches;
+  }
+  const globalTransposedTonalNotes =
     transposition === '1P'
       ? tonalNotes.slice()
       : tonalNotes.map(n => transpose(n, transposition));
+  const transposedTonalNotes = voiceTranspositions
+    ? globalTransposedTonalNotes.map(
+        (n, i) =>
+          voiceTranspositions[i] ? transpose(n, voiceTranspositions[i]) : n,
+      )
+    : globalTransposedTonalNotes.slice();
   const tokenizedNotes = transposedTonalNotes.map(tn => Note.tokenize(tn));
   const staffOffsets = tokenizedNotes.map((tkn, i, a) => {
     const step = tkn[0];
@@ -84,8 +101,8 @@ const formatNotes = ({ notes, staffExtent, transposition }) => {
   return {
     ledgerLines,
     width,
-    notes: notes.map((_, i) => ({
-      note: notes[i],
+    notes: tonalNotes.map((_, i) => ({
+      note: notes[i] || null,
       staffOffset: staffOffsets[i],
       accidental: accidentals[i],
       alteration: alterations[i],

@@ -2,6 +2,7 @@ const dataContext = require.context('./data', true, /[0-9]+\.json/);
 
 const glyphNames = require('./assets/fonts/metadata/glyphNames.json');
 
+export const START_POINTS = require('./data/startPoints.json');
 export const TEST_MOMENTS = dataContext
   .keys()
   .map((key, i) => dataContext(key));

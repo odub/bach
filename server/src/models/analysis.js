@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
         replacements: {
           key: analysisString,
           analysisMethod1: 7,
-          analysisMethod2: 10,
+          analysisMethod2: 9,
         },
       })
       .then(continuations =>
