@@ -1,4 +1,5 @@
 const Note = require('tonal-note');
+const { transpose } = require('tonal-distance');
 
 const parsedXmlToTonal = p =>
   p && Note.from({ alt: p.alter, oct: p.octave }, p.step);
@@ -29,8 +30,13 @@ const tonalToParsedXml = p => {
   };
 };
 
+const transposeVoices = (pitches, transpositions) => {
+  return pitches.map((n, i) => transpose(n, transpositions[i]));
+};
+
 module.exports = {
   accidentalToAlteration,
   parsedXmlToTonal,
   tonalToParsedXml,
+  transposeVoices,
 };

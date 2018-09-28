@@ -25,16 +25,10 @@ const formatNotes = ({
   } else if (pitches && pitches.length) {
     tonalNotes = pitches;
   }
-  const globalTransposedTonalNotes =
+  const transposedTonalNotes =
     transposition === '1P'
       ? tonalNotes.slice()
       : tonalNotes.map(n => transpose(n, transposition));
-  const transposedTonalNotes = voiceTranspositions
-    ? globalTransposedTonalNotes.map(
-        (n, i) =>
-          voiceTranspositions[i] ? transpose(n, voiceTranspositions[i]) : n,
-      )
-    : globalTransposedTonalNotes.slice();
   const tokenizedNotes = transposedTonalNotes.map(tn => Note.tokenize(tn));
   const staffOffsets = tokenizedNotes.map((tkn, i, a) => {
     const step = tkn[0];

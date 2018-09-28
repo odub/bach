@@ -9,6 +9,34 @@
   position: relative;
 }
 
+.Moment.disabled {
+  opacity: 0.8;
+}
+
+.Moment.disabled *:not(.Staff) {
+  visibility: hidden;
+}
+
+.Moment.previous:hover:before,
+.Moment.next:hover:before {
+  display: block;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  position: absolute;
+  color: white;
+  text-align: center;
+  line-height: 14.5rem;
+}
+.Moment.next:hover:before {
+  content: '⟶';
+}
+.Moment.previous:hover:before {
+  content: '⟵';
+}
+
 .MomentDebugToggle {
   position: absolute;
   bottom: 0;
@@ -18,4 +46,8 @@
 .Count {
   position: absolute;
   padding: 0 0.5rem;
+}
+
+.Staff.disabled {
+  visibility: hidden;
 }

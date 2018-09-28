@@ -3,6 +3,7 @@ import './App.css';
 
 import Moment from './Moment';
 import { TEST_MOMENTS, START_POINTS } from './constants';
+import { transposeVoices } from './utils/pitch';
 
 import './milligram.css';
 import './global.css';
@@ -30,15 +31,22 @@ class App extends Component {
   state = {
     transpose: '1P',
     chord: null,
+    chordHistory: [],
     suggestions: [],
+    suggestionsLoaded: false,
   };
   componentDidMount() {
-    this.onChordChanged(
-      START_POINTS[Math.floor(START_POINTS.length * Math.random())],
-    );
+    this.onChordChanged({
+      chord: START_POINTS[Math.floor(START_POINTS.length * Math.random())],
+    });
   }
-  onChordChanged(chord) {
-    this.setState({ chord, suggestions: [] });
+  onChordChanged({ chord, addToHistory = true }) {
+    this.setState({
+      chord,
+      suggestionsLoaded: false,
+    });
+    addToHistory &&
+      this.setState({ chordHistory: [chord, ...this.state.chordHistory] });
     fetch('http://localhost:4000/api/v1/analyses/continuations/suggest/', {
       method: 'POST',
       body: JSON.stringify({ pitches: chord }),
@@ -48,9 +56,14 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(result =>
-        this.setState({ suggestions: console.log(result.data) || result.data }),
-      )
-      .then(console.log);
+        this.setState({ suggestions: result.data, suggestionsLoaded: true }),
+      );
+  }
+  back() {
+    this.setState({
+      chord: this.state.chordHistory[0],
+      chordHistory: this.state.chordHistory.slice(1),
+    });
   }
   render() {
     return (
@@ -67,8 +80,23 @@ class App extends Component {
           ))}
         </select>
         <div className="MomentWrapper">
+          <div className="PrevMoment">
+            {this.state.chordHistory && (
+              <Moment
+                type={'previous'}
+                disabled={this.state.chordHistory.length <= 1}
+                pitches={this.state.chordHistory[1]}
+                transpose={this.state.transpose}
+                changeChord={chord => {
+                  this.back();
+                  this.onChordChanged({ chord, addToHistory: false });
+                }}
+              />
+            )}
+          </div>
           <div className="CurrentMoment">
             <Moment
+              type={'current'}
               pitches={this.state.chord}
               transpose={this.state.transpose}
             />
@@ -76,11 +104,18 @@ class App extends Component {
           <div className="Suggestions">
             {this.state.suggestions.map((s, i) => (
               <Moment
+                type={'next'}
                 key={i}
-                pitches={this.state.chord}
+                pitches={transposeVoices(
+                  this.state.suggestionsLoaded
+                    ? this.state.chord
+                    : this.state.chordHistory[0],
+                  s.continuation,
+                )}
                 transpose={this.state.transpose}
-                voiceTranspositions={s.continuation}
                 count={s.count}
+                changeChord={chord => this.onChordChanged({ chord })}
+                disabled={!this.state.suggestionsLoaded}
               />
             ))}
           </div>

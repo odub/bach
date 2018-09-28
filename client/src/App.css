@@ -10,3 +10,16 @@
   display: flex;
   flex-direction: row;
 }
+
+.PrevMoment {
+  position: fixed;
+}
+
+.CurrentMoment {
+  position: fixed;
+  left: 11.5rem;
+}
+
+.Suggestions {
+  margin-left: 23rem;
+}

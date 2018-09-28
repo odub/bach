@@ -5,12 +5,13 @@ import { STAFF_LINE_WIDTH } from './constants';
 
 class Staff extends Component {
   render() {
-    const { staffLines } = this.props;
+    const { staffLines, ...props } = this.props;
     return (
       <svg
         viewBox="-50 -75 100 150"
         xmlns="http://www.w3.org/2000/svg"
         className="Staff"
+        {...props}
       >
         {staffLines.map((v, i) => (
           <line
