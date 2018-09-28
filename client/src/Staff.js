@@ -8,7 +8,7 @@ class Staff extends Component {
     const { staffLines } = this.props;
     return (
       <svg
-        viewBox="-50 -100 100 200"
+        viewBox="-50 -75 100 150"
         xmlns="http://www.w3.org/2000/svg"
         className="Staff"
       >
