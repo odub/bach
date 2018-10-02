@@ -12,6 +12,21 @@ import './global.css';
 
 const Note = require('tonal-note');
 
+const pcs = [
+  'C',
+  'C#/Db',
+  'D',
+  'D#/Eb',
+  'E',
+  'F',
+  'F#/Gb',
+  'G',
+  'G#/Gb',
+  'A',
+  'A#/Bb',
+  'B',
+];
+
 const basicIntervals = [
   '1P',
   '2m',
@@ -38,7 +53,7 @@ class App extends Component {
     chordHistory: [],
     suggestions: [],
     suggestionsLoaded: false,
-    heldNotes: Array.from({ length: 127 }, () => false),
+    heldPcs: Array.from({ length: 12 }, () => false),
   };
   componentDidMount() {
     this.onChordChanged({
@@ -49,7 +64,7 @@ class App extends Component {
     this.setState({
       chord,
       suggestionsLoaded: false,
-      heldNotes: Array.from({ length: 127 }, () => false),
+      heldPcs: Array.from({ length: 12 }, () => false),
     });
     addToHistory &&
       this.setState({ chordHistory: [chord, ...this.state.chordHistory] });
@@ -115,15 +130,14 @@ class App extends Component {
                   : this.state.chordHistory[0],
                 s.continuation,
               );
-              const noteNumberSet = new Set(pitches.map(Note.midi));
-              const heldNoteNumbers = this.state.heldNotes.reduce(
-                (acc, v, i) => (v ? [...acc, i] : acc),
+              const pcSet = new Set(pitches.map(p => Note.midi(p) % 12));
+              const heldPcs = this.state.heldPcs.reduce(
+                (acc, v, i) => (v ? [...acc, i % 12] : acc),
                 [],
               );
               if (
-                (this.state.heldNotes.some(v => v) &&
-                  console.log(heldNoteNumbers, noteNumberSet)) ||
-                heldNoteNumbers.some(v => !noteNumberSet.has(v))
+                this.state.heldPcs.some(v => v) &&
+                heldPcs.some(v => !pcSet.has(v))
               ) {
                 return acc;
               }
@@ -142,20 +156,20 @@ class App extends Component {
             }, [])}
           </div>
           <div className="Keyboard">
-            {this.state.heldNotes.map((n, i) => {
+            {this.state.heldPcs.map((n, i) => {
               return (
                 <div
                   className={cx(['Key', { active: n }])}
                   key={`key${i}`}
                   onClick={() => {
-                    const newHeldNotes = this.state.heldNotes;
-                    newHeldNotes[i] = !newHeldNotes[i];
+                    const newheldPcs = this.state.heldPcs;
+                    newheldPcs[i] = !newheldPcs[i];
                     this.setState({
-                      heldNotes: newHeldNotes,
+                      heldPcs: newheldPcs,
                     });
                   }}
                 >
-                  {Note.fromMidi(i)}
+                  {pcs[i]}
                 </div>
               );
             })}
