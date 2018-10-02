@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       ') a',
       'JOIN "MomentAnalyses" similarms ON (a.id = similarms."analysisId")',
       'JOIN "MomentAnalyses" nextms ON (similarms."momentId" + 1 = nextms."momentId")',
-      'JOIN "Analyses" nexta ON (nexta.id = nextms."analysisId") AND (nexta."methodId" = :analysisMethod2)',
+      'JOIN "Analyses" nexta ON (nexta.id = nextms."analysisId") AND (nexta."methodId" = :analysisMethod2) AND (nexta.key NOT SIMILAR TO \'\\s+\')',
       'GROUP BY nexta.key',
       'ORDER BY count DESC;',
     ].join('\n');
