@@ -1,3 +1,4 @@
+import cx from 'classnames';
 import React, { Component } from 'react';
 import './App.css';
 
@@ -8,6 +9,8 @@ import { transposeVoices } from './utils/pitch';
 
 import './milligram.css';
 import './global.css';
+
+const Note = require('tonal-note');
 
 const basicIntervals = [
   '1P',
@@ -35,6 +38,7 @@ class App extends Component {
     chordHistory: [],
     suggestions: [],
     suggestionsLoaded: false,
+    heldNotes: Array.from({ length: 127 }, () => false),
   };
   componentDidMount() {
     this.onChordChanged({
@@ -45,6 +49,7 @@ class App extends Component {
     this.setState({
       chord,
       suggestionsLoaded: false,
+      heldNotes: Array.from({ length: 127 }, () => false),
     });
     addToHistory &&
       this.setState({ chordHistory: [chord, ...this.state.chordHistory] });
@@ -103,22 +108,57 @@ class App extends Component {
             />
           </div>
           <div className="Suggestions">
-            {this.state.suggestions.map((s, i) => (
-              <Moment
-                type={'next'}
-                key={i}
-                pitches={transposeVoices(
-                  this.state.suggestionsLoaded
-                    ? this.state.chord
-                    : this.state.chordHistory[0],
-                  s.continuation,
-                )}
-                transpose={this.state.transpose}
-                count={s.count}
-                changeChord={chord => this.onChordChanged({ chord })}
-                disabled={!this.state.suggestionsLoaded}
-              />
-            ))}
+            {this.state.suggestions.reduce((acc, s, i) => {
+              const pitches = transposeVoices(
+                this.state.suggestionsLoaded
+                  ? this.state.chord
+                  : this.state.chordHistory[0],
+                s.continuation,
+              );
+              const noteNumberSet = new Set(pitches.map(Note.midi));
+              const heldNoteNumbers = this.state.heldNotes.reduce(
+                (acc, v, i) => (v ? [...acc, i] : acc),
+                [],
+              );
+              if (
+                (this.state.heldNotes.some(v => v) &&
+                  console.log(heldNoteNumbers, noteNumberSet)) ||
+                heldNoteNumbers.some(v => !noteNumberSet.has(v))
+              ) {
+                return acc;
+              }
+              return [
+                ...acc,
+                <Moment
+                  type={'next'}
+                  key={i}
+                  pitches={pitches}
+                  transpose={this.state.transpose}
+                  count={s.count}
+                  changeChord={chord => this.onChordChanged({ chord })}
+                  disabled={!this.state.suggestionsLoaded}
+                />,
+              ];
+            }, [])}
+          </div>
+          <div className="Keyboard">
+            {this.state.heldNotes.map((n, i) => {
+              return (
+                <div
+                  className={cx(['Key', { active: n }])}
+                  key={`key${i}`}
+                  onClick={() => {
+                    const newHeldNotes = this.state.heldNotes;
+                    newHeldNotes[i] = !newHeldNotes[i];
+                    this.setState({
+                      heldNotes: newHeldNotes,
+                    });
+                  }}
+                >
+                  {Note.fromMidi(i)}
+                </div>
+              );
+            })}
           </div>
           <Score
             chordHistory={this.state.chordHistory}
