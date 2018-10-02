@@ -29,12 +29,11 @@
   right: 1.5rem;
   top: 1.5rem;
   height: 100vh;
-  width: 600px;
 }
 .Key {
-  display: inline-block;
-  width: 45px;
+  min-width: 45px;
   text-align: center;
+  padding: 0 5px;
   margin: 2.5px;
   border-radius: 3px;
   border: 1px solid transparent;
