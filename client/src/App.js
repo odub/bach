@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 import Moment from './Moment';
+import Score from './Score';
 import { TEST_MOMENTS, START_POINTS } from './constants';
 import { transposeVoices } from './utils/pitch';
 
@@ -119,6 +120,10 @@ class App extends Component {
               />
             ))}
           </div>
+          <Score
+            chordHistory={this.state.chordHistory}
+            transpose={this.state.transpose}
+          />
         </div>
       </div>
     );

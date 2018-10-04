@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { formatNotes } from './utils/note';
 
 import Staff from './Staff';
+import Chord from './Chord';
 import Notehead from './Notehead';
 import LedgerLines from './LedgerLines';
 import Accidentals from './Accidentals';
@@ -27,19 +28,21 @@ class Moment extends Component {
     return (
       <div
         className={cx(['Moment', { disabled, [type]: !disabled }])}
-        onClick={() => !disabled && type !== 'current' && changeChord(pitches)}
+        onClick={() =>
+          !disabled && type !== 'current' && changeChord && changeChord(pitches)
+        }
       >
         {this.props.count && <div className="Count">{this.props.count}</div>}
         <Staff staffLines={STAFF_LINES}>
-          {notes.map((n, i) => (
-            <Notehead {...n} width={width} key={i} />
-          ))}
-          {ledgerLines && (
-            <LedgerLines
-              {...{ ledgerLines, staffExtent: STAFF_EXTENT, width }}
-            />
-          )}
-          {notes && <Accidentals {...{ notes, width }} />}
+          <Chord
+            {...{
+              notes,
+              ledgerLines,
+              width,
+              staffExtent: STAFF_EXTENT,
+              cx: 3.5,
+            }}
+          />
         </Staff>
       </div>
     );

@@ -5,18 +5,19 @@ import { STAFF_LINE_WIDTH } from './constants';
 
 class Staff extends Component {
   render() {
-    const { staffLines, ...props } = this.props;
+    const { staffLines, width = 7, ...props } = this.props;
     return (
       <svg
-        viewBox="-50 -75 100 150"
+        viewBox={`0 -75 ${width * STAFF_LINE_WIDTH} 150`}
         xmlns="http://www.w3.org/2000/svg"
         className="Staff"
+        style={{ width: width * STAFF_LINE_WIDTH }}
         {...props}
       >
         {staffLines.map((v, i) => (
           <line
-            x1="-30"
-            x2="30"
+            x1={0}
+            x2={width * STAFF_LINE_WIDTH}
             y1={v * 0.5 * STAFF_LINE_WIDTH}
             y2={v * 0.5 * STAFF_LINE_WIDTH}
             key={i}

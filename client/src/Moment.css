@@ -7,6 +7,11 @@
   border-radius: 3px;
   border: solid #e5e5e5 1px;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  user-select: none;
 }
 
 .Moment.disabled {
@@ -46,6 +51,8 @@
 .Count {
   position: absolute;
   padding: 0 0.5rem;
+  top: 0;
+  left: 0;
 }
 
 .Staff.disabled {
