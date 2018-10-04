@@ -44,3 +44,17 @@
   user-select: none;
   transition: bottom 0.25s;
 }
+
+.PlayPause {
+  position: absolute;
+  top: 0.75rem;
+  left: 1.5rem;
+  width: 10rem;
+  height: 4rem;
+  line-height: 3.5rem;
+  border: 2px solid white;
+  text-align: center;
+  border-radius: 5px;
+  color: white;
+  user-select: none;
+}

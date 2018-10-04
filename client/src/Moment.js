@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import cx from 'classnames';
 
 import { formatNotes } from './utils/note';
+import { playChord } from './utils/midi';
 
 import Staff from './Staff';
 import Chord from './Chord';
@@ -31,6 +32,9 @@ class Moment extends Component {
         onClick={() =>
           !disabled && type !== 'current' && changeChord && changeChord(pitches)
         }
+        onMouseEnter={() => {
+          playChord(pitches);
+        }}
       >
         {this.props.count && <div className="Count">{this.props.count}</div>}
         <Staff staffLines={STAFF_LINES}>
