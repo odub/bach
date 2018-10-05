@@ -17,6 +17,6 @@ var synth = new Tone.Synth({
 var polySynth = new Tone.PolySynth(4, Tone.Synth).toMaster();
 
 export const playChord = pitches => {
-  const sanitizedPitches = pitches.map(Note.midi).map(Note.fromMidi);
+  const sanitizedPitches = (pitches || []).map(Note.midi).map(Note.fromMidi);
   polySynth.triggerAttackRelease(sanitizedPitches, '4n');
 };
