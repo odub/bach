@@ -16,7 +16,7 @@ class Chord extends Component {
     return (
       <g className="Chord" transform={`translate(${cx * STAFF_LINE_WIDTH}, 0)`}>
         {' '}
-        {notes.filter(n => n.staffOffset !== null).map((n, i) => (
+        {notes.filter(n => n.staffOffset || n.staffOffset === 0).map((n, i) => (
           <Notehead {...n} width={width} key={i} />
         ))}
         {ledgerLines && (
