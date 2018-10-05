@@ -16,13 +16,13 @@ class Chord extends Component {
     return (
       <g className="Chord" transform={`translate(${cx * STAFF_LINE_WIDTH}, 0)`}>
         {' '}
-        {notes.map((n, i) => (
+        {notes.filter(n => n.staffOffset !== null).map((n, i) => (
           <Notehead {...n} width={width} key={i} />
         ))}
         {ledgerLines && (
           <LedgerLines {...{ ledgerLines, staffExtent, width }} />
         )}
-        {notes && <Accidentals {...{ notes, width }} />}
+        {notes.length && <Accidentals {...{ notes, width }} />}
       </g>
     );
   }
