@@ -1,12 +1,12 @@
-import cx from 'classnames';
 import React, { Component } from 'react';
-import './App.css';
+import cx from 'classnames';
 
 import Moment from './Moment';
 import Score from './Score';
 import { TEST_MOMENTS, START_POINTS } from './constants';
 import { transposeVoices } from './utils/pitch';
 
+import './App.css';
 import './milligram.css';
 import './global.css';
 
@@ -27,28 +27,8 @@ const pcs = [
   'B',
 ];
 
-const basicIntervals = [
-  '1P',
-  '2m',
-  '2M',
-  '3m',
-  '3M',
-  '4P',
-  '5P',
-  '6m',
-  '6M',
-  '7m',
-  '7M',
-  '8P',
-];
-const intervals = [
-  ...basicIntervals.slice().reverse(),
-  ...basicIntervals.map(v => `-${v}`).slice(1),
-];
-
 class App extends Component {
   state = {
-    transpose: '1P',
     chord: null,
     chordHistory: [],
     suggestions: [],
@@ -89,17 +69,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <select
-          className="TransposeSelect"
-          value={this.state.transpose}
-          onChange={e => this.setState({ transpose: e.target.value })}
-        >
-          {intervals.map((v, i) => (
-            <option value={v} key={i}>
-              {v}
-            </option>
-          ))}
-        </select>
         <div className="MomentWrapper">
           <div className="PrevMoment">
             {this.state.chordHistory && (
@@ -148,7 +117,6 @@ class App extends Component {
                   key={i}
                   pitches={pitches}
                   transpose={this.state.transpose}
-                  count={s.count}
                   changeChord={chord => this.onChordChanged({ chord })}
                   disabled={!this.state.suggestionsLoaded}
                 />,

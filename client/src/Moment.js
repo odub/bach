@@ -36,7 +36,6 @@ class Moment extends Component {
           playChord(pitches);
         }}
       >
-        {this.props.count && <div className="Count">{this.props.count}</div>}
         <Staff staffLines={STAFF_LINES}>
           <Chord
             {...{
