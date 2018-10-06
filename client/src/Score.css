@@ -30,19 +30,30 @@
 
 .ShowHideScore {
   position: fixed;
-  left: calc(50vw - 2rem);
+  right: 1.5rem;
   bottom: 175px;
-  width: 4rem;
-  height: 2rem;
+  height: 3rem;
   font-size: 2rem;
   line-height: 1.5;
-  border-top-right-radius: 2.5rem;
-  border-top-left-radius: 2.5rem;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
   background-color: rgba(0, 0, 0, 0.75);
   text-align: center;
   color: white;
   user-select: none;
   transition: bottom 0.25s;
+  padding: 0 2rem;
+}
+
+.AccordeonArrow {
+  vertical-align: -0.45rem;
+  display: inline-block;
+}
+
+.AccordeonLabel {
+  padding-left: 0.5rem;
+  font-size: 1.5rem;
+  text-transform: uppercase;
 }
 
 .PlayPause {

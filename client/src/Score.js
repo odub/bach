@@ -58,15 +58,17 @@ class Score extends Component {
           onClick={() => this.setState({ hidden: !this.state.hidden })}
           style={{ bottom: this.state.hidden ? 0 : '250px' }}
         >
-          <div
+          <span
+            className="AccordeonArrow"
             style={{
               transform: this.state.hidden
-                ? ''
-                : 'rotate(.5turn) translateY(6px)',
+                ? 'rotate(.5turn) translateY(6px)'
+                : '',
             }}
           >
             {'⌃'}
-          </div>
+          </span>
+          <span className="AccordeonLabel">Score</span>
         </div>
         <span className="PlayPause" onClick={() => this.play()}>
           {this.state.playing ? 'Stop' : 'Play'}
