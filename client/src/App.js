@@ -41,6 +41,7 @@ class App extends Component {
     });
   }
   onChordChanged({ chord, addToHistory = true }) {
+    global.scrollTo(null, 0);
     this.setState({
       chord,
       suggestionsLoaded: false,
