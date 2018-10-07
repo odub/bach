@@ -3,13 +3,11 @@
   bottom: 0;
   right: 0;
   left: 0;
-  height: 250px;
   display: flex;
   flex-direction: row;
   background-color: rgba(0, 0, 0, 0.75);
   overflow-x: auto;
   transition: bottom 0.25s;
-  align-items: center;
 }
 
 .Score .Moment:last-child {
@@ -58,14 +56,21 @@
 
 .PlayPause {
   position: absolute;
-  top: 0.75rem;
-  left: 1.5rem;
-  width: 10rem;
+  bottom: 1.5rem;
+  left: calc(50vh - 2rem);
   height: 4rem;
+  width: 4rem;
+  border-radius: 2rem;
   line-height: 3.5rem;
-  border: 2px solid white;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
-  border-radius: 5px;
   color: white;
   user-select: none;
+}
+
+.PlayPause:hover,
+.PlayPause:active {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.1);
 }

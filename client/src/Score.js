@@ -6,6 +6,8 @@ import Moment from './Moment';
 import './Score.css';
 import { playChord } from './utils/midi';
 
+const FOOTER_HEIGHT = 232;
+
 class Score extends Component {
   state = {
     hidden: false,
@@ -40,7 +42,7 @@ class Score extends Component {
       this.clock.setTimeout(() => {
         this.setState({ playing: false });
         this.clock.stop();
-      }, this.props.chordHistory.length * 0.8),
+      }, this.props.chordHistory.length * 0.45),
     );
   };
   render() {
@@ -48,12 +50,15 @@ class Score extends Component {
     return (
       <div
         className="Score"
-        style={{ bottom: this.state.hidden ? '-250px' : 0 }}
+        style={{
+          height: FOOTER_HEIGHT,
+          bottom: this.state.hidden ? -FOOTER_HEIGHT : 0,
+        }}
       >
         <div
           className="ShowHideScore"
           onClick={() => this.setState({ hidden: !this.state.hidden })}
-          style={{ bottom: this.state.hidden ? 0 : '250px' }}
+          style={{ bottom: this.state.hidden ? 0 : FOOTER_HEIGHT }}
         >
           <span
             className="AccordeonArrow"
@@ -67,9 +72,6 @@ class Score extends Component {
           </span>
           <span className="AccordeonLabel">Score</span>
         </div>
-        <span className="PlayPause" onClick={() => this.play()}>
-          {this.state.playing ? 'Stop' : 'Play'}
-        </span>
         {chordHistory
           .slice()
           .reverse()
@@ -78,11 +80,23 @@ class Score extends Component {
               key={i}
               {...{
                 type: 'current',
+                disableSound: true,
                 pitches,
                 transpose,
               }}
             />
           ))}
+        <span className="PlayPause" onClick={() => this.play()}>
+          <div
+            style={{
+              transform: this.state.playing
+                ? 'translate(-1px, 2px) rotate(0.25turn) scale(1.25, 1.25)'
+                : 'translate(1px, 2px) rotate(0.25turn)',
+            }}
+          >
+            {this.state.playing ? '◼' : '▲'}
+          </div>
+        </span>
       </div>
     );
   }

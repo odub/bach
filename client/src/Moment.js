@@ -30,6 +30,7 @@ class Moment extends Component {
           !disabled && type !== 'current' && changeChord && changeChord(pitches)
         }
         onMouseEnter={() => {
+          if (this.props.disableSound) return;
           release();
           playChord(currentPitches);
           setTimeout(() => playChord(pitches), 300);
