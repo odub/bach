@@ -66,6 +66,12 @@
   opacity: 0.5;
 }
 
+@media (max-width: 600px) {
+  .Keyboard {
+    display: none;
+  }
+}
+
 .Keyboard {
   position: fixed;
   right: 1.5rem;
