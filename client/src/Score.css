@@ -48,13 +48,6 @@
   display: inline-block;
 }
 
-.AccordeonLabel {
-  padding-left: 0.5rem;
-  font-size: 1.5rem;
-  text-transform: uppercase;
-  font-weight: 100;
-}
-
 .PlayPause {
   position: absolute;
   bottom: 1.5rem;

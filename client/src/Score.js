@@ -70,7 +70,6 @@ class Score extends Component {
           >
             {'⌃'}
           </span>
-          <span className="AccordeonLabel">Score</span>
         </div>
         {chordHistory
           .slice()
