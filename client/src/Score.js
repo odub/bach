@@ -4,7 +4,7 @@ import WAAClock from 'waaclock';
 import Moment from './Moment';
 
 import './Score.css';
-import { playChord } from './utils/midi';
+import { playChord } from './utils/synth';
 
 const FOOTER_HEIGHT = 232;
 
