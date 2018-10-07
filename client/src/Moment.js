@@ -6,9 +6,6 @@ import { playChord } from './utils/midi';
 
 import Staff from './Staff';
 import Chord from './Chord';
-import Notehead from './Notehead';
-import LedgerLines from './LedgerLines';
-import Accidentals from './Accidentals';
 
 import './Moment.css';
 

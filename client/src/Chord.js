@@ -7,9 +7,6 @@ import Accidentals from './Accidentals';
 import './Chord.css';
 import { STAFF_LINE_WIDTH } from './constants';
 
-const STAFF_LINES = [-2, -4, -6, -8, -10, 2, 4, 6, 8, 10];
-const STAFF_EXTENT = [Math.min(...STAFF_LINES), Math.max(...STAFF_LINES)];
-
 class Chord extends Component {
   render() {
     const { notes, ledgerLines, width, staffExtent, cx = 0 } = this.props;

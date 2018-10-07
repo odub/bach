@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 import Moment from './Moment';
 import Score from './Score';
-import { TEST_MOMENTS, START_POINTS } from './constants';
+import { START_POINTS } from './constants';
 import { transposeVoices } from './utils/pitch';
 
 import './App.css';

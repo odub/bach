@@ -6,9 +6,6 @@ import Moment from './Moment';
 import './Score.css';
 import { playChord } from './utils/midi';
 
-const STAFF_LINES = [-2, -4, -6, -8, -10, 2, 4, 6, 8, 10];
-const STAFF_EXTENT = [Math.min(...STAFF_LINES), Math.max(...STAFF_LINES)];
-
 class Score extends Component {
   state = {
     hidden: false,
