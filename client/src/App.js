@@ -89,6 +89,7 @@ class App extends Component {
           type={'next'}
           key={i}
           pitches={pitches}
+          currentPitches={this.state.chord}
           transpose={this.state.transpose}
           changeChord={chord => this.onChordChanged({ chord })}
           disabled={!this.state.suggestionsLoaded}

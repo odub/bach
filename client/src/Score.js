@@ -33,7 +33,7 @@ class Score extends Component {
       .reverse()
       .forEach((chord, i) => {
         this.events.push(
-          this.clock.setTimeout(() => playChord(chord), i * 0.8),
+          this.clock.setTimeout(() => playChord(chord), i * 0.45),
         );
       });
     this.events.push(

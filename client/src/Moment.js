@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import cx from 'classnames';
 
 import { formatNotes } from './utils/note';
-import { playChord } from './utils/midi';
+import { playChord, release } from './utils/midi';
 
 import Staff from './Staff';
 import Chord from './Chord';
@@ -14,7 +14,7 @@ const STAFF_EXTENT = [Math.min(...STAFF_LINES), Math.max(...STAFF_LINES)];
 
 class Moment extends Component {
   render() {
-    const { pitches, changeChord, disabled, type } = this.props;
+    const { pitches, currentPitches, changeChord, disabled, type } = this.props;
     const { notes = [], ledgerLines, width } = this.props.pitches
       ? formatNotes({
           pitches: pitches,
@@ -30,7 +30,9 @@ class Moment extends Component {
           !disabled && type !== 'current' && changeChord && changeChord(pitches)
         }
         onMouseEnter={() => {
-          playChord(pitches);
+          release();
+          playChord(currentPitches);
+          setTimeout(() => playChord(pitches), 300);
         }}
       >
         <Staff staffLines={STAFF_LINES}>
