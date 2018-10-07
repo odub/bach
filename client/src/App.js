@@ -67,6 +67,34 @@ class App extends Component {
     });
   }
   render() {
+    const suggestions = this.state.suggestions.reduce((acc, s, i) => {
+      const pitches = transposeVoices(
+        this.state.suggestionsLoaded
+          ? this.state.chord
+          : this.state.chordHistory[0],
+        s.continuation,
+      );
+      const pcSet = new Set(pitches.map(p => Note.midi(p) % 12));
+      const heldPcs = this.state.heldPcs.reduce(
+        (acc, v, i) => (v ? [...acc, i % 12] : acc),
+        [],
+      );
+      if (this.state.heldPcs.some(v => v) && heldPcs.some(v => !pcSet.has(v))) {
+        return acc;
+      }
+      return [
+        ...acc,
+        <Moment
+          type={'next'}
+          key={i}
+          pitches={pitches}
+          transpose={this.state.transpose}
+          changeChord={chord => this.onChordChanged({ chord })}
+          disabled={!this.state.suggestionsLoaded}
+        />,
+      ];
+    }, []);
+
     return (
       <div className="App">
         <div className="MomentWrapper">
@@ -93,36 +121,11 @@ class App extends Component {
               />
             </div>
             <div className="Suggestions">
-              {this.state.suggestions.reduce((acc, s, i) => {
-                const pitches = transposeVoices(
-                  this.state.suggestionsLoaded
-                    ? this.state.chord
-                    : this.state.chordHistory[0],
-                  s.continuation,
-                );
-                const pcSet = new Set(pitches.map(p => Note.midi(p) % 12));
-                const heldPcs = this.state.heldPcs.reduce(
-                  (acc, v, i) => (v ? [...acc, i % 12] : acc),
-                  [],
-                );
-                if (
-                  this.state.heldPcs.some(v => v) &&
-                  heldPcs.some(v => !pcSet.has(v))
-                ) {
-                  return acc;
-                }
-                return [
-                  ...acc,
-                  <Moment
-                    type={'next'}
-                    key={i}
-                    pitches={pitches}
-                    transpose={this.state.transpose}
-                    changeChord={chord => this.onChordChanged({ chord })}
-                    disabled={!this.state.suggestionsLoaded}
-                  />,
-                ];
-              }, [])}
+              {suggestions.length
+                ? suggestions
+                : this.state.suggestionsLoaded && (
+                    <div className="NoSuggestions">No suggestions found</div>
+                  )}
             </div>
           </div>
           <div className="Keyboard">

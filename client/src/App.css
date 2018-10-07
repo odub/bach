@@ -29,6 +29,19 @@
 
 .Suggestions {
   margin-left: 23rem;
+  min-width: 115px;
+}
+
+.Suggestions .Moment:last-of-type {
+  margin-bottom: 50vh;
+}
+
+.NoSuggestions {
+  width: 98px;
+  text-align: center;
+  margin-top: 3.5rem;
+  margin-left: 1.5rem;
+  opacity: 0.5;
 }
 
 .Keyboard {
@@ -49,8 +62,4 @@
 .Key.active {
   background-color: white;
   border-color: #e5e5e5;
-}
-
-.Suggestions .Moment:last-of-type {
-  margin-bottom: 50vh;
 }
