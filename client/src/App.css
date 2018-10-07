@@ -9,6 +9,13 @@
 .MomentWrapper {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+}
+
+.SuggestionWrapper {
+  display: flex;
+  flex-direction: row;
+  position: relative;
 }
 
 .PrevMoment {
@@ -17,7 +24,7 @@
 
 .CurrentMoment {
   position: fixed;
-  left: 11.5rem;
+  margin-left: 11.5rem;
 }
 
 .Suggestions {

@@ -70,58 +70,60 @@ class App extends Component {
     return (
       <div className="App">
         <div className="MomentWrapper">
-          <div className="PrevMoment">
-            {this.state.chordHistory && (
-              <Moment
-                type={'previous'}
-                disabled={this.state.chordHistory.length <= 1}
-                pitches={this.state.chordHistory[1]}
-                transpose={this.state.transpose}
-                changeChord={chord => {
-                  this.back();
-                  this.onChordChanged({ chord, addToHistory: false });
-                }}
-              />
-            )}
-          </div>
-          <div className="CurrentMoment">
-            <Moment
-              type={'current'}
-              pitches={this.state.chord}
-              transpose={this.state.transpose}
-            />
-          </div>
-          <div className="Suggestions">
-            {this.state.suggestions.reduce((acc, s, i) => {
-              const pitches = transposeVoices(
-                this.state.suggestionsLoaded
-                  ? this.state.chord
-                  : this.state.chordHistory[0],
-                s.continuation,
-              );
-              const pcSet = new Set(pitches.map(p => Note.midi(p) % 12));
-              const heldPcs = this.state.heldPcs.reduce(
-                (acc, v, i) => (v ? [...acc, i % 12] : acc),
-                [],
-              );
-              if (
-                this.state.heldPcs.some(v => v) &&
-                heldPcs.some(v => !pcSet.has(v))
-              ) {
-                return acc;
-              }
-              return [
-                ...acc,
+          <div className="SuggestionWrapper">
+            <div className="PrevMoment">
+              {this.state.chordHistory && (
                 <Moment
-                  type={'next'}
-                  key={i}
-                  pitches={pitches}
+                  type={'previous'}
+                  disabled={this.state.chordHistory.length <= 1}
+                  pitches={this.state.chordHistory[1]}
                   transpose={this.state.transpose}
-                  changeChord={chord => this.onChordChanged({ chord })}
-                  disabled={!this.state.suggestionsLoaded}
-                />,
-              ];
-            }, [])}
+                  changeChord={chord => {
+                    this.back();
+                    this.onChordChanged({ chord, addToHistory: false });
+                  }}
+                />
+              )}
+            </div>
+            <div className="CurrentMoment">
+              <Moment
+                type={'current'}
+                pitches={this.state.chord}
+                transpose={this.state.transpose}
+              />
+            </div>
+            <div className="Suggestions">
+              {this.state.suggestions.reduce((acc, s, i) => {
+                const pitches = transposeVoices(
+                  this.state.suggestionsLoaded
+                    ? this.state.chord
+                    : this.state.chordHistory[0],
+                  s.continuation,
+                );
+                const pcSet = new Set(pitches.map(p => Note.midi(p) % 12));
+                const heldPcs = this.state.heldPcs.reduce(
+                  (acc, v, i) => (v ? [...acc, i % 12] : acc),
+                  [],
+                );
+                if (
+                  this.state.heldPcs.some(v => v) &&
+                  heldPcs.some(v => !pcSet.has(v))
+                ) {
+                  return acc;
+                }
+                return [
+                  ...acc,
+                  <Moment
+                    type={'next'}
+                    key={i}
+                    pitches={pitches}
+                    transpose={this.state.transpose}
+                    changeChord={chord => this.onChordChanged({ chord })}
+                    disabled={!this.state.suggestionsLoaded}
+                  />,
+                ];
+              }, [])}
+            </div>
           </div>
           <div className="Keyboard">
             {this.state.heldPcs.map((n, i) => {
