@@ -101,7 +101,12 @@ class App extends Component {
       <div className="App">
         <div className="MomentWrapper">
           <div className="SuggestionWrapper">
-            <div className="PrevMoment">
+            <div
+              className={cx([
+                'PrevMoment',
+                { active: this.state.chordHistory.length > 1 },
+              ])}
+            >
               {this.state.chordHistory && (
                 <Moment
                   type={'previous'}
@@ -122,7 +127,9 @@ class App extends Component {
                 transpose={this.state.transpose}
               />
             </div>
-            <div className="Suggestions">
+            <div
+              className={cx(['Suggestions', { active: suggestions.length }])}
+            >
               {suggestions.length
                 ? suggestions
                 : this.state.suggestionsLoaded && (

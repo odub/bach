@@ -19,7 +19,7 @@
   position: relative;
 }
 
-.PrevMoment:before {
+.PrevMoment.active:before {
   content: 'Previous';
   position: absolute;
   margin-left: 1.5rem;
@@ -29,7 +29,7 @@
   opacity: 0.5;
 }
 
-.Suggestions:before {
+.Suggestions.active:before {
   content: 'Next';
   position: absolute;
   margin-left: 1.5rem;
