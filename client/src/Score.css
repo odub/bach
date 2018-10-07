@@ -40,7 +40,7 @@
   color: white;
   user-select: none;
   transition: bottom 0.25s;
-  padding: 0 2rem;
+  padding: 0 1.5rem 0 1.25rem;
 }
 
 .AccordeonArrow {
@@ -52,6 +52,7 @@
   padding-left: 0.5rem;
   font-size: 1.5rem;
   text-transform: uppercase;
+  font-weight: 100;
 }
 
 .PlayPause {
