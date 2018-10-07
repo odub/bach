@@ -50,3 +50,7 @@
   background-color: white;
   border-color: #e5e5e5;
 }
+
+.Suggestions .Moment:last-of-type {
+  margin-bottom: 50vh;
+}
