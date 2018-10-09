@@ -49,17 +49,24 @@ class App extends Component {
     });
     addToHistory &&
       this.setState({ chordHistory: [chord, ...this.state.chordHistory] });
-    fetch('http://localhost:4000/api/v1/analyses/continuations/suggest/', {
-      method: 'POST',
-      body: JSON.stringify({ pitches: chord }),
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-    })
-      .then(response => response.json())
-      .then(result =>
-        this.setState({ suggestions: result.data, suggestionsLoaded: true }),
-      );
+    this.controller && this.controller.abort();
+    if (global.AbortController) {
+      this.controller = new global.AbortController();
+      this.signal = this.controller.signal;
+    }
+    chord &&
+      fetch('http://localhost:4000/api/v1/analyses/continuations/suggest/', {
+        method: 'POST',
+        body: JSON.stringify({ pitches: chord }),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        ...(this.signal && { signal: this.signal }),
+      })
+        .then(response => response.json())
+        .then(result =>
+          this.setState({ suggestions: result.data, suggestionsLoaded: true }),
+        );
   }
   back() {
     this.setState({
