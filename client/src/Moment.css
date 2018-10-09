@@ -22,8 +22,8 @@
   visibility: hidden;
 }
 
-.Moment.previous:hover:before,
-.Moment.next:hover:before {
+.Moment.previous.clickable:hover:before,
+.Moment.next.clickable:hover:before {
   display: block;
   left: 0;
   right: 0;
@@ -35,10 +35,10 @@
   text-align: center;
   line-height: 14.5rem;
 }
-.Moment.next:hover:before {
+.Moment.next.clickable:hover:before {
   content: '⟶';
 }
-.Moment.previous:hover:before {
+.Moment.previous.clickable:hover:before {
   content: '⟵';
 }
 

@@ -14,7 +14,14 @@ const STAFF_EXTENT = [Math.min(...STAFF_LINES), Math.max(...STAFF_LINES)];
 
 class Moment extends Component {
   render() {
-    const { pitches, currentPitches, changeChord, disabled, type } = this.props;
+    const {
+      pitches,
+      currentPitches,
+      changeChord,
+      disabled,
+      type,
+      clickable,
+    } = this.props;
     const { notes = [], ledgerLines, width } = this.props.pitches
       ? formatNotes({
           pitches: pitches,
@@ -25,9 +32,20 @@ class Moment extends Component {
 
     return (
       <div
-        className={cx(['Moment', { disabled, [type]: !disabled }])}
+        className={cx([
+          'Moment',
+          {
+            disabled,
+            [type]: !disabled,
+            clickable: clickable,
+          },
+        ])}
         onClick={() =>
-          !disabled && type !== 'current' && changeChord && changeChord(pitches)
+          clickable &&
+          !disabled &&
+          type !== 'current' &&
+          changeChord &&
+          changeChord(pitches)
         }
         onMouseEnter={() => {
           if (this.props.disableSound) return;

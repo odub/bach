@@ -98,6 +98,7 @@ class App extends Component {
           pitches={pitches}
           currentPitches={this.state.chord}
           transpose={this.state.transpose}
+          clickable={true}
           changeChord={chord => this.onChordChanged({ chord })}
           disabled={!this.state.suggestionsLoaded}
         />,
@@ -111,31 +112,33 @@ class App extends Component {
             <div
               className={cx([
                 'PrevMoment',
-                { active: this.state.chordHistory.length > 1 },
+                {
+                  active: this.state.chord,
+                },
               ])}
             >
-              {this.state.chordHistory && (
+              {
                 <Moment
                   type={'previous'}
-                  disabled={this.state.chordHistory.length <= 1}
-                  pitches={this.state.chordHistory[1]}
+                  clickable={this.state.chordHistory[1]}
+                  disabled={!this.state.chord}
+                  pitches={this.state.chord}
                   transpose={this.state.transpose}
                   changeChord={chord => {
                     this.back();
-                    this.onChordChanged({ chord, addToHistory: false });
+                    this.onChordChanged({
+                      chord: this.state.chordHistory[1],
+                      addToHistory: false,
+                    });
                   }}
                 />
-              )}
-            </div>
-            <div className="CurrentMoment">
-              <Moment
-                type={'current'}
-                pitches={this.state.chord}
-                transpose={this.state.transpose}
-              />
+              }
             </div>
             <div
-              className={cx(['Suggestions', { active: suggestions.length }])}
+              className={cx([
+                'Suggestions',
+                { active: suggestions && suggestions.length },
+              ])}
             >
               {suggestions.length
                 ? suggestions
