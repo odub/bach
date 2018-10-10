@@ -1,0 +1,28 @@
+.Devices {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgb(20, 20, 20, 0.95);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.DeviceList {
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  min-width: 50vw;
+  padding: 1.5rem;
+  border-radius: 3px;
+  border: solid #e5e5e5 1px;
+}
+
+.DeviceButtonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}

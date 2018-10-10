@@ -90,3 +90,22 @@
   background-color: white;
   border-color: #e5e5e5;
 }
+
+.DeviceSettings {
+  position: absolute;
+  padding: 1.5rem 2rem;
+  user-select: none;
+  top: 0;
+  left: 0;
+  display: none;
+}
+
+.DeviceSettings.visible {
+  display: initial;
+}
+
+@media (max-width: 600px) {
+  .DeviceSettings.visible {
+    display: none;
+  }
+}
