@@ -1,4 +1,3 @@
-const Tone = require('tone');
 const Note = require('tonal-note');
 const { Piano } = require('tone-piano');
 
@@ -8,7 +7,7 @@ const polySynth = new Piano([24, 96], 5).toMaster();
 
 let queuedEvents = [];
 
-polySynth.load().then(() => console.log('piano loaded'));
+polySynth.load().then(() => console.info('piano loaded'));
 
 export const cancelAll = () => {
   queuedEvents.forEach(e => e.clear());
