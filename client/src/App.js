@@ -80,6 +80,7 @@ class App extends Component {
       chord,
       suggestionsLoaded: false,
       heldPcs: Array.from({ length: 12 }, () => false),
+      heldPitches: new Set([]),
     });
     addToHistory &&
       this.setState({ chordHistory: [chord, ...this.state.chordHistory] });
