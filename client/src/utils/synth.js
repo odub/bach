@@ -4,9 +4,7 @@ const Note = require('tonal-note');
 var polySynth = new Tone.PolySynth(8, Tone.Synth).toMaster();
 polySynth.set({
   oscillator: {
-    type: 'amtriangle',
-    harmonicity: 0.5,
-    modulationType: 'sine',
+    type: 'sawtooth',
   },
   envelope: {
     attackCurve: 'exponential',
@@ -15,7 +13,6 @@ polySynth.set({
     sustain: 0.2,
     release: 1.5,
   },
-  portamento: 0.05,
 });
 
 export const release = () => polySynth.releaseAll();
