@@ -4,6 +4,7 @@ import cx from 'classnames';
 import Moment from './Moment';
 import Score from './Score';
 import Devices from './Devices';
+import Keyboard from './Keyboard';
 import { START_POINTS } from './constants';
 import { transposeVoices } from './utils/pitch';
 import { listInputs } from './utils/midi';
@@ -13,21 +14,6 @@ import './milligram.css';
 import './global.css';
 
 const Note = require('tonal-note');
-
-const pcs = [
-  'C',
-  'C#/Db',
-  'D',
-  'D#/Eb',
-  'E',
-  'F',
-  'F#/Gb',
-  'G',
-  'G#/Gb',
-  'A',
-  'A#/Bb',
-  'B',
-];
 
 class App extends Component {
   state = {
@@ -220,25 +206,12 @@ class App extends Component {
                   )}
             </div>
           </div>
-          <div className="Keyboard">
-            {this.state.heldPcs.map((n, i) => {
-              return (
-                <div
-                  className={cx(['Key', { active: n }])}
-                  key={`key${i}`}
-                  onClick={() => {
-                    const newheldPcs = this.state.heldPcs;
-                    newheldPcs[i] = !newheldPcs[i];
-                    this.setState({
-                      heldPcs: newheldPcs,
-                    });
-                  }}
-                >
-                  {pcs[i]}
-                </div>
-              );
-            })}
-          </div>
+          <Keyboard
+            heldPcs={this.state.heldPcs}
+            setHeldPcs={heldPcs => this.setState({ heldPcs })}
+            heldPitches={this.state.heldPitches}
+            setHeldPitches={heldPitches => this.setState({ heldPitches })}
+          />
           <Score
             chordHistory={this.state.chordHistory}
             transpose={this.state.transpose}

@@ -1,0 +1,25 @@
+@media (max-width: 600px) {
+  .PitchClasses {
+    display: none;
+  }
+}
+
+.PitchClasses {
+  position: fixed;
+  right: 1.5rem;
+  top: 1.5rem;
+  height: 100vh;
+}
+.PitchClass {
+  min-width: 45px;
+  text-align: center;
+  padding: 0 5px;
+  margin: 2.5px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  user-select: none;
+}
+.PitchClass.active {
+  background-color: white;
+  border-color: #e5e5e5;
+}
