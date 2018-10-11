@@ -10,6 +10,7 @@
     "tonal-distance": "^2.0.0",
     "tonal-note": "^1.1.2",
     "tone": "^0.12.80",
+    "tone-piano": "^0.0.12",
     "waaclock": "^0.5.3"
   },
   "scripts": {

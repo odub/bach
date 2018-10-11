@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import cx from 'classnames';
 
 import { formatNotes } from './utils/note';
-import { playChord, release } from './utils/synth';
+import { playChord, cancelAll } from './utils/synth';
 
 import Staff from './Staff';
 import Chord from './Chord';
@@ -49,12 +49,11 @@ class Moment extends Component {
         }
         onMouseEnter={() => {
           if (this.props.disableSound) return;
-          this.queuedChord && clearTimeout(this.queuedChord);
-          release();
+          cancelAll();
           playChord(currentPitches);
-          this.queuedChord = setTimeout(() => playChord(pitches), 300);
+          playChord(pitches, 0.41);
         }}
-        onMouseLeave={() => release()}
+        onMouseLeave={() => cancelAll()}
       >
         <Staff staffLines={STAFF_LINES}>
           <Chord

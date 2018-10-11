@@ -1,23 +1,27 @@
 const Tone = require('tone');
 const Note = require('tonal-note');
+const { Piano } = require('tone-piano');
 
-var polySynth = new Tone.PolySynth(8, Tone.Synth).toMaster();
-polySynth.set({
-  oscillator: {
-    type: 'sawtooth',
-  },
-  envelope: {
-    attackCurve: 'exponential',
-    attack: 0.02,
-    decay: 0.2,
-    sustain: 0.2,
-    release: 1.5,
-  },
-});
+const { clock } = require('./clock');
 
-export const release = () => polySynth.releaseAll();
+const polySynth = new Piano([24, 96], 5).toMaster();
 
-export const playChord = pitches => {
+let queuedEvents = [];
+
+polySynth.load().then(() => console.log('piano loaded'));
+
+export const cancelAll = () => {
+  queuedEvents.forEach(e => e.clear());
+  polySynth.stopAll();
+  queuedEvents = [];
+};
+
+export const playChord = (pitches, time = 0) => {
   const sanitizedPitches = (pitches || []).map(Note.midi).map(Note.fromMidi);
-  polySynth.triggerAttackRelease(sanitizedPitches, '0.4s');
+  sanitizedPitches.forEach(pitch => {
+    queuedEvents.push(clock.setTimeout(() => polySynth.keyDown(pitch), time));
+    queuedEvents.push(
+      clock.setTimeout(() => polySynth.keyUp(pitch), time + 0.4),
+    );
+  });
 };
