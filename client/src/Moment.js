@@ -21,6 +21,7 @@ class Moment extends Component {
       disabled,
       type,
       clickable,
+      playing,
     } = this.props;
     const { notes = [], ledgerLines, width } = this.props.pitches
       ? formatNotes({
@@ -36,6 +37,7 @@ class Moment extends Component {
           'Moment',
           {
             disabled,
+            playing,
             [type]: !disabled,
             clickable: clickable,
           },

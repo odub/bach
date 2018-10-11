@@ -15,10 +15,15 @@ export const cancelAll = () => {
   queuedEvents = [];
 };
 
-export const playChord = (pitches, time = 0) => {
+export const playChord = (pitches, time = 0, cb) => {
   const sanitizedPitches = (pitches || []).map(Note.midi).map(Note.fromMidi);
   sanitizedPitches.forEach(pitch => {
-    queuedEvents.push(clock.setTimeout(() => polySynth.keyDown(pitch), time));
+    queuedEvents.push(
+      clock.setTimeout(() => {
+        polySynth.keyDown(pitch);
+        cb && cb();
+      }, time),
+    );
     queuedEvents.push(
       clock.setTimeout(() => polySynth.keyUp(pitch), time + 0.4),
     );

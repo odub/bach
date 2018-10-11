@@ -12,22 +12,26 @@ class Score extends Component {
   state = {
     hidden: false,
     playing: false,
+    playingMoment: null,
   };
   play = () => {
     if (this.state.playing) {
       cancelAll();
-      this.setState({ playing: false });
+      this.setState({ playing: false, playingMoment: null });
       return;
     }
+    cancelAll();
     this.setState({ playing: true });
     this.props.chordHistory
       .slice()
       .reverse()
       .forEach((chord, i) => {
-        playChord(chord, i * 0.45);
+        playChord(chord, i * 0.45, () => {
+          this.setState({ playingMoment: i });
+        });
       });
     clock.setTimeout(() => {
-      this.setState({ playing: false });
+      this.setState({ playing: false, playingMoment: null });
       cancelAll();
     }, this.props.chordHistory.length * 0.45);
   };
@@ -65,6 +69,7 @@ class Score extends Component {
               key={i}
               {...{
                 type: 'current',
+                playing: this.state.playingMoment === i,
                 disableSound: true,
                 pitches,
                 transpose,
