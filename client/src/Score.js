@@ -85,7 +85,13 @@ class Score extends Component {
               }}
             />
           ))}
-        <span className="PlayPause" onClick={() => this.play()}>
+        <span
+          className="PlayPause"
+          style={{
+            bottom: this.state.hidden ? -FOOTER_HEIGHT : '2.5rem',
+          }}
+          onClick={() => this.play()}
+        >
           <div
             style={{
               transform: this.state.playing

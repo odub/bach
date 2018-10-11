@@ -7,6 +7,9 @@
   flex-direction: row;
   background-color: rgba(20, 20, 20, 0.95);
   overflow-x: auto;
+}
+.Score,
+.PlayPause {
   transition: bottom 0.25s;
 }
 
@@ -50,7 +53,6 @@
 
 .PlayPause {
   position: fixed;
-  bottom: 2.5rem;
   left: calc(50vw - 2rem);
   height: 4rem;
   width: 4rem;
