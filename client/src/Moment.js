@@ -54,6 +54,7 @@ class Moment extends Component {
           playChord(currentPitches);
           this.queuedChord = setTimeout(() => playChord(pitches), 300);
         }}
+        onMouseLeave={() => release()}
       >
         <Staff staffLines={STAFF_LINES}>
           <Chord
