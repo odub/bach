@@ -6,7 +6,7 @@ import Moment from './Moment';
 import './Score.css';
 import { playChord } from './utils/synth';
 
-const FOOTER_HEIGHT = 232;
+const FOOTER_HEIGHT = 255;
 
 class Score extends Component {
   state = {
