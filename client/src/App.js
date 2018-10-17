@@ -41,12 +41,13 @@ class App extends Component {
     this.onChordChanged({
       chord: START_POINTS[Math.floor(START_POINTS.length * Math.random())],
     });
-    navigator.requestMIDIAccess().then(access => {
-      this.access = access;
-      this.access.onstatechange = event =>
-        this.setState({ midiInputs: listInputs(event.currentTarget) });
-      this.setState({ midiInputs: listInputs(this.access) });
-    });
+    navigator.requestMIDIAccess &&
+      navigator.requestMIDIAccess().then(access => {
+        this.access = access;
+        this.access.onstatechange = event =>
+          this.setState({ midiInputs: listInputs(event.currentTarget) });
+        this.setState({ midiInputs: listInputs(this.access) });
+      });
   }
   handleMidiEvent = e => {
     const { data } = e;
