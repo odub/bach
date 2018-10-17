@@ -2,6 +2,11 @@ const dataContext = require.context('./data', true, /[0-9]+\.json/);
 
 const glyphNames = require('./assets/fonts/metadata/glyphNames.json');
 
+export const API_BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://voice-leading.herokuapp.com'
+    : 'http://localhost:4000';
+
 export const START_POINTS = require('./data/startPoints.json');
 export const TEST_MOMENTS = dataContext
   .keys()

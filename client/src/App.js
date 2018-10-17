@@ -5,7 +5,7 @@ import Moment from './Moment';
 import Score from './Score';
 import Devices from './Devices';
 import Keyboard from './Keyboard';
-import { START_POINTS } from './constants';
+import { START_POINTS, API_BASE_URL } from './constants';
 import { transposeVoices } from './utils/pitch';
 import { listInputs } from './utils/midi';
 
@@ -90,7 +90,7 @@ class App extends Component {
       this.signal = this.controller.signal;
     }
     chord &&
-      fetch('http://localhost:4000/api/v1/analyses/continuations/suggest/', {
+      fetch(`${API_BASE_URL}/api/v1/analyses/continuations/suggest/`, {
         method: 'POST',
         body: JSON.stringify({ pitches: chord }),
         headers: {
