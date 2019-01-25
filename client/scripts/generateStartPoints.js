@@ -10,7 +10,7 @@ const noteNumbers = file
   .slice(0, -1)
   .map(l => l.replace(/},\s*$/, '}').replace(/(^\s*\[|\]\s*$)/, ''))
   .map(JSON.parse)
-  .map(o => o.notes.map(n => musicXmlParse(n)));
-
+  .map(o => o.notes.map(n => musicXmlParse(n)))
+  .filter(a => !a.some(v => v === null));
 const output = JSON.stringify(noteNumbers, null, '  ');
 console.info(output);
