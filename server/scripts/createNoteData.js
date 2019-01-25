@@ -88,7 +88,7 @@ const extractNoteData = (document, filename) => {
             break;
           case 'Note': {
             const durationQuarters =
-              parsedXml.duration / attributes[part].divisions;
+              (parsedXml.duration || 0) / attributes[part].divisions;
             const durationTicks = durationQuarters * TICKS_PER_QUARTER;
             const index = indexes[part] || 0;
             const offset = offsets[part] || 0;

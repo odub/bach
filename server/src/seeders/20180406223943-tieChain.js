@@ -37,6 +37,7 @@ FROM (
               n.offset
           ) as num
         FROM "Notes" n
+        WHERE n.duration > 0
       ) n
   ) n
   WHERE

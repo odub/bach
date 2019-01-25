@@ -1,12 +1,22 @@
 const tonal = require('tonal');
 
 module.exports = (sequelize, DataTypes) => {
-  var Analysis = sequelize.define('Analysis', {
-    key: {
-      type: DataTypes.STRING,
-      unique: true,
+  var Analysis = sequelize.define(
+    'Analysis',
+    {
+      key: {
+        type: DataTypes.STRING,
+      },
     },
-  });
+    {
+      indexes: [
+        {
+          unique: true,
+          fields: ['methodId', 'key'],
+        },
+      ],
+    },
+  );
   Analysis.associate = function(models) {
     Analysis.belongsToMany(models.Moment, {
       through: 'MomentAnalyses',
