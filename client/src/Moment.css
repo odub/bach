@@ -28,6 +28,7 @@
   border: none;
 }
 
+.Moment.current:hover:before,
 .Moment.previous.clickable:hover:before,
 .Moment.next.clickable:hover:before {
   display: block;
@@ -35,17 +36,25 @@
   right: 0;
   top: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75);
   position: absolute;
   color: white;
   text-align: center;
   line-height: 14.5rem;
 }
+.Moment.current:hover:before,
 .Moment.next.clickable:hover:before {
-  content: '⟶';
+  content: ' ';
+  box-shadow: inset 3px 3px 0px gold, inset -3px -3px 0px gold;
 }
+
+.Moment.current:hover {
+  border-width: 0;
+}
+
 .Moment.previous.clickable:hover:before {
   content: '⟵';
+  background-color: rgba(0, 0, 0, 0.75);
+  /* box-shadow: inset 3px 3px 0px gold, inset -3px -3px 0px gold; */
 }
 
 .MomentDebugToggle {
