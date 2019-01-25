@@ -16,14 +16,15 @@ class Splash extends Component {
   render() {
     return (
       <div className="Splash">
-        <div>
+        <div className="SplashWrapper">
           <h4>Welcome to Voice Graph.</h4>
           <p>Voice Graph is an interactive way to explore musical harmony.</p>
+          <p>Connect headphones and a MIDI keyboard now if available.</p>
           <br />
         </div>
         <div>
           <button onClick={this.props.dismiss} disabled={!this.props.ready}>
-            Start exploring
+            Start
           </button>
         </div>
         <div className="Loading" style={{ opacity: this.props.ready ? 0 : 1 }}>
