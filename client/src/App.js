@@ -37,7 +37,9 @@ class App extends Component {
       (this.state.midiInputs &&
         this.state.midiInputs.length &&
         !prevState.midiInputs) ||
-      (prevState.midiInputs &&
+      (this.state.midiInputs &&
+        this.state.midiInputs.length &&
+        prevState.midiInputs &&
         this.state.midiInputs.length !== prevState.midiInputs.length &&
         !this.state.midiInputs.some(i => i.id === this.midiInput))
     ) {
@@ -71,13 +73,9 @@ class App extends Component {
   };
   setMidiInput(id) {
     const oldId = this.state.midiInput;
-    if (oldId) {
-      this.access.inputs
-        .get(oldId)
-        .then(input => {
-          input.onmidimessage = null;
-        })
-        .catch(console.info);
+    const oldInput = oldId && this.access.inputs.get(oldId);
+    if (oldId && oldInput) {
+      oldInput.onmidimessage = null;
     }
     const input = this.access.inputs.get(id);
     input.onmidimessage = e => this.handleMidiEvent(e);
