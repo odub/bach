@@ -22,7 +22,7 @@ const seedChorales = queryInterface =>
       const lines = `${overhang}${chunk.toString()}`.split('\n');
       overhang = lines.slice(-1)[0];
       const chorales = lines.slice(0, -1);
-      models.Chorale.bulkCreate(chorales.map(JSON.parse));
+      models.Chorale.bulkCreate(chorales.map(JSON.parse), { logging: false });
     });
 
     chorales.on('end', () => {
@@ -39,7 +39,7 @@ const seedNotes = queryInterface =>
       const lines = `${overhang}${chunk.toString()}`.split('\n');
       overhang = lines.slice(-1)[0];
       const notes = lines.slice(0, -1);
-      models.Note.bulkCreate(notes.map(JSON.parse));
+      models.Note.bulkCreate(notes.map(JSON.parse), { logging: false });
     });
 
     notes.on('end', () => {

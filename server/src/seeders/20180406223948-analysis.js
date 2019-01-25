@@ -142,7 +142,11 @@ const generateIntervalTransition = (r0, r1, options = { markHeld: false }) => {
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.resolve()
-      .then(() => models.AnalysisMethod.bulkCreate(ANALYSIS_METHODS))
+      .then(() =>
+        models.AnalysisMethod.bulkCreate(ANALYSIS_METHODS, {
+          logging: false,
+        }),
+      )
       .then(() =>
         queryInterface.sequelize.query(SQL_GET_PITCH_DATA, { raw: true }),
       )
@@ -250,7 +254,9 @@ module.exports = {
                 overhang = lines.slice(-1)[0];
                 const analyses = lines.slice(0, -1);
                 return promises.push(
-                  models.Analysis.bulkCreate(analyses.map(a => JSON.parse(a))),
+                  models.Analysis.bulkCreate(analyses.map(a => JSON.parse(a)), {
+                    logging: false,
+                  }),
                 );
               })
               .on('end', () => {
