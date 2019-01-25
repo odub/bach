@@ -29,7 +29,9 @@ class App extends Component {
   };
   componentDidUpdate(_, prevState) {
     if (
-      (this.state.midiInputs && !prevState.midiInputs) ||
+      (this.state.midiInputs &&
+        this.state.midiInputs.length &&
+        !prevState.midiInputs) ||
       (prevState.midiInputs &&
         this.state.midiInputs.length !== prevState.midiInputs.length &&
         !this.state.midiInputs.some(i => i.id === this.midiInput))
