@@ -38,5 +38,20 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-2755097-8"
+    ></script>
+    <script>
+      if (document.location.hostname.search('github.io') !== -1) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-2755097-8');
+      }
+    </script>
   </body>
 </html>
