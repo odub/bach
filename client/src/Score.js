@@ -10,7 +10,7 @@ const FOOTER_HEIGHT = 255;
 
 class Score extends Component {
   state = {
-    hidden: false,
+    hidden: true,
     playing: false,
     playingMoment: null,
   };
@@ -51,6 +51,7 @@ class Score extends Component {
           onClick={() => this.setState({ hidden: !this.state.hidden })}
           style={{ bottom: this.state.hidden ? 0 : FOOTER_HEIGHT }}
         >
+          <span className="ScoreLength">{chordHistory.length}</span>
           <span
             className="AccordeonArrow"
             style={{
