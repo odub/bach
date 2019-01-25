@@ -7,6 +7,11 @@
 }
 
 .MomentWrapper {
+  visibility: hidden;
+}
+
+.MomentWrapper.visible {
+  visibility: initial;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -77,6 +82,12 @@
 
 .DeviceSettings.visible {
   display: initial;
+}
+
+@media (min-width: 601px) {
+  .MomentWrapper {
+    width: calc(100vw - 240px);
+  }
 }
 
 @media (max-width: 600px) {

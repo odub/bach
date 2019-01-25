@@ -22,6 +22,7 @@ class Moment extends Component {
       type,
       clickable,
       playing,
+      count,
     } = this.props;
     const { notes = [], ledgerLines, width } = this.props.pitches
       ? formatNotes({
@@ -57,6 +58,7 @@ class Moment extends Component {
         }}
         onMouseLeave={() => cancelAll()}
       >
+        <span className="Count">{count}</span>
         <Staff staffLines={STAFF_LINES}>
           <Chord
             {...{

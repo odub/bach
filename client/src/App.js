@@ -149,6 +149,7 @@ class App extends Component {
         <Moment
           type={'next'}
           key={i}
+          count={s.count}
           pitches={pitches}
           currentPitches={this.state.chord}
           transpose={this.state.transpose}
