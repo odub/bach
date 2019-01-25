@@ -5,6 +5,7 @@ import Moment from './Moment';
 import Score from './Score';
 import Devices from './Devices';
 import Keyboard from './Keyboard';
+import Splash from './Splash';
 import { START_POINTS, API_BASE_URL } from './constants';
 import { transposeVoices } from './utils/pitch';
 import { listInputs } from './utils/midi';
@@ -26,6 +27,8 @@ class App extends Component {
     midiInput: null,
     midiInputs: null,
     midiDeviceModal: false,
+    splash: true,
+    appLoaded: false,
   };
   componentDidUpdate(_, prevState) {
     if (
@@ -112,6 +115,11 @@ class App extends Component {
       chordHistory: this.state.chordHistory.slice(1),
     });
   }
+  dismissSplash() {
+    clock();
+    this.setState({ splash: false });
+    global.scrollTo(0, 0);
+  }
   render() {
     const suggestions = this.state.suggestions.reduce((acc, s, i) => {
       const pitches = transposeVoices(
@@ -150,6 +158,12 @@ class App extends Component {
 
     return (
       <div className="App">
+        {this.state.splash && (
+          <Splash
+            dismiss={() => this.dismissSplash()}
+            ready={this.state.appLoaded}
+          />
+        )}
         <div
           className={cx([
             'DeviceSettings',
@@ -170,7 +184,14 @@ class App extends Component {
             handleDismiss={() => this.setState({ midiDeviceModal: false })}
           />
         )}
-        <div className="MomentWrapper">
+        <div
+          className={cx([
+            'MomentWrapper',
+            {
+              visible: !this.state.splash,
+            },
+          ])}
+        >
           <div className="SuggestionWrapper">
             <div
               className={cx([
