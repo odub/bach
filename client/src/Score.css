@@ -13,10 +13,6 @@
   transition: bottom 0.25s;
 }
 
-.Score .Moment:last-child {
-  margin-right: 5rem;
-}
-
 .ScoreWrapper {
   background-color: white;
   margin: 1.5rem 0 0 1.5rem;

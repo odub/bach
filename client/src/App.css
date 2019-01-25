@@ -50,6 +50,10 @@
   text-align: center;
 }
 
+.Suggestions.active.hasNoHistory:before {
+  content: '';
+}
+
 .PrevMoment {
   position: fixed;
 }
@@ -82,6 +86,18 @@
 
 .DeviceSettings.visible {
   display: initial;
+}
+
+.InitInstruction {
+  position: absolute;
+  color: #004091;
+  width: 100px;
+  height: 150px;
+  padding: 18px 0 0 5px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (min-width: 601px) {

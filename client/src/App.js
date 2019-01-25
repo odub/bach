@@ -16,14 +16,20 @@ import './App.css';
 import './milligram.css';
 import './global.css';
 
+const DEFAULT_CHORD = ['C4', 'C4', 'C4', 'C4'];
+const DEFAULT_SUGGESTIONS = START_POINTS.map(continuation => ({
+  continuation,
+  count: -1,
+}));
+
 const Note = require('tonal-note');
 
 class App extends Component {
   state = {
-    chord: null,
+    chord: DEFAULT_CHORD,
     chordHistory: [],
-    suggestions: [],
-    suggestionsLoaded: false,
+    suggestions: DEFAULT_SUGGESTIONS,
+    suggestionsLoaded: true,
     heldPcs: Array.from({ length: 12 }, () => false),
     heldPitches: new Set([]),
     midiInput: null,
@@ -48,9 +54,6 @@ class App extends Component {
   }
   componentDidMount() {
     loadSynth(() => this.setState({ appLoaded: true }));
-    this.onChordChanged({
-      chord: START_POINTS[Math.floor(START_POINTS.length * Math.random())],
-    });
     navigator.requestMIDIAccess &&
       navigator.requestMIDIAccess().then(access => {
         this.access = access;
@@ -112,7 +115,10 @@ class App extends Component {
   }
   back() {
     this.setState({
-      chord: this.state.chordHistory[0],
+      chord:
+        this.state.chordHistory.length > 1
+          ? this.state.chordHistory[0]
+          : DEFAULT_CHORD,
       chordHistory: this.state.chordHistory.slice(1),
     });
   }
@@ -199,19 +205,32 @@ class App extends Component {
               className={cx([
                 'PrevMoment',
                 {
-                  active: this.state.chord,
+                  active: this.state.chordHistory.length,
                 },
               ])}
             >
+              <div
+                className="InitInstruction"
+                style={{ opacity: this.state.chordHistory.length ? 0 : 1 }}
+              >
+                <p>Select a chord to start ⟶</p>
+              </div>
               {
                 <Moment
                   type={'previous'}
-                  clickable={this.state.chordHistory[1]}
-                  disabled={!this.state.chord}
+                  clickable={this.state.chordHistory.length}
+                  disabled={!this.state.chordHistory.length}
                   pitches={this.state.chord}
                   transpose={this.state.transpose}
                   changeChord={chord => {
                     this.back();
+                    if (!this.state.chordHistory.length < 1) {
+                      this.setState({
+                        suggestions: DEFAULT_SUGGESTIONS,
+                        suggestionsLoaded: true,
+                      });
+                      return;
+                    }
                     this.onChordChanged({
                       chord: this.state.chordHistory[1],
                       addToHistory: false,
@@ -223,7 +242,10 @@ class App extends Component {
             <div
               className={cx([
                 'Suggestions',
-                { active: suggestions && suggestions.length },
+                {
+                  active: suggestions && suggestions.length,
+                  hasNoHistory: !this.state.chordHistory.length,
+                },
               ])}
             >
               {suggestions.length
