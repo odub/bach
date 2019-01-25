@@ -58,7 +58,7 @@ class Moment extends Component {
         }}
         onMouseLeave={() => cancelAll()}
       >
-        <span className="Count">{count}</span>
+        <span className="Count">{count >= 0 && count}</span>
         <Staff staffLines={STAFF_LINES}>
           <Chord
             {...{
