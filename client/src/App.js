@@ -9,6 +9,8 @@ import Splash from './Splash';
 import { START_POINTS, API_BASE_URL } from './constants';
 import { transposeVoices } from './utils/pitch';
 import { listInputs } from './utils/midi';
+import { clock } from './utils/clock';
+import { load as loadSynth } from './utils/synth';
 
 import './App.css';
 import './milligram.css';
@@ -43,6 +45,7 @@ class App extends Component {
     }
   }
   componentDidMount() {
+    loadSynth(() => this.setState({ appLoaded: true }));
     this.onChordChanged({
       chord: START_POINTS[Math.floor(START_POINTS.length * Math.random())],
     });

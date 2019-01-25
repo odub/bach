@@ -7,7 +7,9 @@ const polySynth = new Piano([24, 96], 5).toMaster();
 
 let queuedEvents = [];
 
-polySynth.load().then(() => console.info('piano loaded'));
+export const load = cb => {
+  polySynth.load().then(cb);
+};
 
 export const cancelAll = () => {
   queuedEvents.forEach(e => e.clear());
@@ -19,13 +21,13 @@ export const playChord = (pitches, time = 0, duration = 0.4, cb) => {
   const sanitizedPitches = (pitches || []).map(Note.midi).map(Note.fromMidi);
   sanitizedPitches.forEach(pitch => {
     queuedEvents.push(
-      clock.setTimeout(() => {
+      clock().setTimeout(() => {
         polySynth.keyDown(pitch);
         cb && cb();
       }, time),
     );
     queuedEvents.push(
-      clock.setTimeout(() => polySynth.keyUp(pitch), time + duration),
+      clock().setTimeout(() => polySynth.keyUp(pitch), time + duration),
     );
   });
 };

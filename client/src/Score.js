@@ -25,15 +25,16 @@ class Score extends Component {
     this.props.chordHistory
       .slice()
       .reverse()
-      .forEach((chord, i) => {
-        playChord(chord, i * 0.45, 0.4, () => {
+      .forEach((chord, i, a) => {
+        const duration = i === a.length - 1 ? 1.5 : 0.4;
+        playChord(chord, i * 0.45, duration, () => {
           this.setState({ playingMoment: i });
         });
       });
-    clock.setTimeout(() => {
+    clock().setTimeout(() => {
       this.setState({ playing: false, playingMoment: null });
       cancelAll();
-    }, this.props.chordHistory.length * 0.45);
+    }, this.props.chordHistory.length * 0.45 + 1.1);
   };
   render() {
     const { chordHistory, transpose } = this.props;

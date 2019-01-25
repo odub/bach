@@ -1,5 +1,15 @@
 import WAAClock from 'waaclock';
 
-const context = new AudioContext();
-export const clock = new WAAClock(context);
-clock.start();
+let _context;
+let _clock;
+
+export const clock = () => {
+  if (!_context) {
+    _context = new AudioContext();
+  }
+  if (!_clock) {
+    _clock = new WAAClock(_context);
+    _clock.start();
+  }
+  return _clock;
+};
