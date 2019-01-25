@@ -18,9 +18,7 @@ class Splash extends Component {
       <div className="Splash">
         <div>
           <h4>Welcome to Voice Graph.</h4>
-          <p>
-            Voice Graph is a new interactive way of exploring musical harmony.
-          </p>
+          <p>Voice Graph is an interactive way to explore musical harmony.</p>
           <br />
         </div>
         <div>
