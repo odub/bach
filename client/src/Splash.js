@@ -31,7 +31,11 @@ class Splash extends Component {
           <div className="Progress">
             <div
               className="ProgressBar"
-              style={{ width: `${this.state.progress * 100}%` }}
+              style={{
+                width: `${(this.state.progress < 0.01
+                  ? 0.01
+                  : this.state.progress) * 100}%`,
+              }}
             />
           </div>
         </div>
