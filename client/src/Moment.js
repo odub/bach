@@ -53,7 +53,7 @@ class Moment extends Component {
           if (this.props.disableSound) return;
           cancelAll();
           playChord(currentPitches);
-          playChord(pitches, 0.41);
+          playChord(pitches, 0.41, 0.8);
         }}
         onMouseLeave={() => cancelAll()}
       >

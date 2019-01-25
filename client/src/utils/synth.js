@@ -15,7 +15,7 @@ export const cancelAll = () => {
   queuedEvents = [];
 };
 
-export const playChord = (pitches, time = 0, cb) => {
+export const playChord = (pitches, time = 0, duration = 0.4, cb) => {
   const sanitizedPitches = (pitches || []).map(Note.midi).map(Note.fromMidi);
   sanitizedPitches.forEach(pitch => {
     queuedEvents.push(
@@ -25,7 +25,7 @@ export const playChord = (pitches, time = 0, cb) => {
       }, time),
     );
     queuedEvents.push(
-      clock.setTimeout(() => polySynth.keyUp(pitch), time + 0.4),
+      clock.setTimeout(() => polySynth.keyUp(pitch), time + duration),
     );
   });
 };

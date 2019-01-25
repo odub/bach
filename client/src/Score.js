@@ -26,7 +26,7 @@ class Score extends Component {
       .slice()
       .reverse()
       .forEach((chord, i) => {
-        playChord(chord, i * 0.45, () => {
+        playChord(chord, i * 0.45, 0.4, () => {
           this.setState({ playingMoment: i });
         });
       });
