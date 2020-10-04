@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+  db:
+    image: "postgres:12-alpine"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./server/scripts/pg-createdbs:/docker-entrypoint-initdb.d/createdbs.sh
+      - ./server/etc/postgres.conf:/etc/postgresql/postgresql.conf
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DATABASE=bach_development
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_PORT=5432
+  api:
+    build: ./server
+    image: "node"
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./server:/usr/app
+    depends_on: 
+      - db
+    environment:
+      - POSTGRES_HOST=db

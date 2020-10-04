@@ -1,0 +1,4 @@
+#!/bin/bash
+
+createdb bach_development -U root
+createdb bach_test -U root

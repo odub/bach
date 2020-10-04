@@ -11,8 +11,9 @@ module.exports = {
       username: 'root',
       password: null,
       database: 'bach_development',
-      host: '127.0.0.1',
+      host: 'db',
       dialect: 'postgres',
+      port: 5432,
     },
     cors: {
       credentials: true,
@@ -25,9 +26,10 @@ module.exports = {
       username: 'root',
       password: null,
       database: 'bach_test',
-      host: '127.0.0.1',
+      host: 'db',
       dialect: 'postgres',
       logging: false,
+      port: 5432,
     },
     cors: {
       credentials: true,
