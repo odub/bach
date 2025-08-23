@@ -13,6 +13,7 @@ module.exports = {
       database: 'bach_development',
       host: '127.0.0.1',
       dialect: 'postgres',
+      operatorsAliases: false,
     },
     cors: {
       credentials: true,
@@ -28,6 +29,7 @@ module.exports = {
       host: '127.0.0.1',
       dialect: 'postgres',
       logging: false,
+      operatorsAliases: false,
     },
     cors: {
       credentials: true,
@@ -39,6 +41,7 @@ module.exports = {
     db: {
       dialect: 'postgres',
       use_env_variable: 'DATABASE_URL',
+      operatorsAliases: false,
     },
     cors: {
       credentials: true,
