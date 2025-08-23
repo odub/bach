@@ -8,7 +8,7 @@
   "scripts": {
     "config:gen": "node scripts/generateDbConfig.js > dbConfig.json",
     "data:clean": "rm -rf data/*",
-    "data:dl": "svn checkout https://github.com/cuthbertLab/music21/trunk/music21/corpus/bach data/corpusRaw",
+    "data:dl": "git clone --depth 1 --filter=blob:none --sparse https://github.com/cuthbertLab/music21.git data/music21-temp && cd data/music21-temp && git sparse-checkout set music21/corpus/bach && cd .. && mv music21-temp/music21/corpus/bach corpusRaw && rm -rf music21-temp",
     "data:unzip": "mkdir -p data/corpus/tmp; for i in \"data/corpusRaw/\"*\".mxl\"; do unzip -nd data/corpus/tmp/ $i; mv -fv data/corpus/tmp/*.xml \"$(echo $i | sed s/mxl$/xml/ | sed s/corpusRaw/corpus/)\"; done; rm -rf data/corpus/tmp",
     "data:seed:chorales": "node scripts/createChoraleData.js > data/chorales.txt && echo \"$(cat ./data/chorales.txt | wc -l) chorales written to disk\" ",
     "data:seed:notes": "node scripts/createNoteData.js > data/notes.txt && echo \"$(cat ./data/notes.txt | wc -l) notes written to disk\"",
