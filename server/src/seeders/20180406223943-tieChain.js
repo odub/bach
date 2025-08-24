@@ -19,11 +19,11 @@ SELECT
   now() as "updatedAt",
   row_number() OVER () as id
 FROM (
-  SELECT 
+  SELECT
     *,
     lead(n.num) OVER (ORDER BY n.num) AS "nextTieNum"
     FROM (
-      SELECT 
+      SELECT
       *,
       lag(greatest(upper(n.timespan), 0)) OVER (ORDER BY n.num) AS "prevFinish"
       FROM (
@@ -37,6 +37,7 @@ FROM (
               n.offset
           ) as num
         FROM "Notes" n
+        INNER JOIN "Chorales" c ON n.source = c.bwv
         WHERE n.duration > 0
       ) n
   ) n
@@ -46,16 +47,22 @@ FROM (
 ) n
 `;
 
+const SQL_CLEANUP_INVALID_NOTES = `
+DELETE FROM "Notes"
+WHERE source NOT IN (SELECT bwv FROM "Chorales")
+`;
+
 const SQL_UPDATE_NOTES = `
 UPDATE "Notes" u
-SET "tieChainId" = sub."tieChainId" 
+SET "tieChainId" = sub."tieChainId"
 FROM (
-  SELECT n.id, t.id as "tieChainId" 
-  FROM "Notes" n 
-  JOIN "TieChains" t 
-  ON 
-    (n.source = t.source) 
-    AND (n.part = t.part) 
+  SELECT n.id, t.id as "tieChainId"
+  FROM "Notes" n
+  INNER JOIN "Chorales" c ON n.source = c.bwv
+  JOIN "TieChains" t
+  ON
+    (n.source = t.source)
+    AND (n.part = t.part)
     AND (n.timespan && t.timespan)
 ) as sub
 WHERE u.id = sub.id
@@ -65,6 +72,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize
       .query('ALTER TABLE "TieChains" DISABLE TRIGGER ALL;')
+      .then(() => queryInterface.sequelize.query(SQL_CLEANUP_INVALID_NOTES))
       .then(() => queryInterface.sequelize.query(SQL_GENERATE_TIE_CHAINS))
       .then(() => queryInterface.sequelize.query(SQL_UPDATE_NOTES))
       .then(() =>
