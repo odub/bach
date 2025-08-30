@@ -7,8 +7,8 @@ const polySynth = new Piano([24, 96], 5).toMaster();
 
 let queuedEvents = [];
 
-export const load = cb => {
-  polySynth.load().then(cb);
+export const load = (cb) => {
+  polySynth.load('https://tambien.github.io/Piano/audio/').then(cb);
 };
 
 export const cancelAll = () => {
