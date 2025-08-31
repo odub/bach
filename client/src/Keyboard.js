@@ -7,14 +7,14 @@ const pcs = [
   'C',
   'C#/Db',
   'D',
-  'D#/Eb',
+  'Eb/D#',
   'E',
   'F',
   'F#/Gb',
   'G',
-  'G#/Gb',
+  'G#/Ab',
   'A',
-  'A#/Bb',
+  'Bb/A#',
   'B',
 ];
 
