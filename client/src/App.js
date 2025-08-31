@@ -224,7 +224,7 @@ class App extends Component {
                   transpose={this.state.transpose}
                   changeChord={chord => {
                     this.back();
-                    if (!this.state.chordHistory.length < 1) {
+                    if (this.state.chordHistory.length < 2) {
                       this.setState({
                         suggestions: DEFAULT_SUGGESTIONS,
                         suggestionsLoaded: true,
