@@ -8,6 +8,7 @@ import Staff from './Staff';
 import Chord from './Chord';
 
 import './Moment.css';
+import { logScale } from './utils/math';
 
 const STAFF_LINES = [-2, -4, -6, -8, -10, 2, 4, 6, 8, 10];
 const STAFF_EXTENT = [Math.min(...STAFF_LINES), Math.max(...STAFF_LINES)];
@@ -36,7 +37,7 @@ class Moment extends Component {
           transposition: this.props.transpose || '1P',
         })
       : {};
-    const height = Math.min(8, count);
+    const height = Math.floor(logScale(count, 1, 30, 1, 7));
 
     return (
       <div
