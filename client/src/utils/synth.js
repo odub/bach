@@ -12,17 +12,22 @@ export const load = (cb) => {
 };
 
 export const cancelAll = () => {
-  queuedEvents.forEach(e => e.clear());
+  queuedEvents.forEach((e) => e.clear());
   polySynth.stopAll();
   queuedEvents = [];
 };
 
-export const playChord = (pitches, time = 0, duration = 0.4, cb) => {
+export const playChord = (
+  pitches,
+  options = { time: 0, duration: 0.4, velocity: 0.6 },
+  cb,
+) => {
+  const { time, duration, velocity } = options;
   const sanitizedPitches = (pitches || []).map(Note.midi).map(Note.fromMidi);
-  sanitizedPitches.forEach(pitch => {
+  sanitizedPitches.forEach((pitch) => {
     queuedEvents.push(
       clock().setTimeout(() => {
-        polySynth.keyDown(pitch);
+        polySynth.keyDown(pitch, undefined, velocity);
         cb && cb();
       }, time),
     );
