@@ -50,6 +50,7 @@
   display: flex;
   width: 40vw;
   flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 .Suggestions .Moment:last-of-type {

@@ -75,3 +75,27 @@
 .Staff.disabled {
   visibility: hidden;
 }
+
+.Moment.placeholder {
+  opacity: 0.75;
+}
+
+@keyframes placeHolderShimmer {
+  0%{ background-position: -468px 0; }
+  100%{ background-position: 468px 0; }
+}
+
+.Placeholder {
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-name: placeHolderShimmer;
+  background: white;
+  background: linear-gradient(to right, #eeeeee 8%, #e0e0e0 18%, #eeeeee 33%);
+  background-size: 800px 104px;
+  height: 96px;
+  position: relative;
+  border-radius: 3px;
+  width: 6rem;
+}

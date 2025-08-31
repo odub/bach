@@ -6,6 +6,7 @@ import Score from './Score';
 import Devices from './Devices';
 import Keyboard from './Keyboard';
 import Splash from './Splash';
+
 import { START_POINTS, API_BASE_URL } from './constants';
 import { transposeVoices } from './utils/pitch';
 import { listInputs } from './utils/midi';
@@ -17,7 +18,7 @@ import './milligram.css';
 import './global.css';
 
 const DEFAULT_CHORD = ['C4', 'C4', 'C4', 'C4'];
-const DEFAULT_SUGGESTIONS = START_POINTS.map(continuation => ({
+const DEFAULT_SUGGESTIONS = START_POINTS.map((continuation) => ({
   continuation,
   count: -1,
 }));
@@ -47,7 +48,7 @@ class App extends Component {
         this.state.midiInputs.length &&
         prevState.midiInputs &&
         this.state.midiInputs.length !== prevState.midiInputs.length &&
-        !this.state.midiInputs.some(i => i.id === this.midiInput))
+        !this.state.midiInputs.some((i) => i.id === this.midiInput))
     ) {
       this.setMidiInput(this.state.midiInputs[0].id);
     }
@@ -55,14 +56,14 @@ class App extends Component {
   componentDidMount() {
     loadSynth(() => this.setState({ appLoaded: true }));
     navigator.requestMIDIAccess &&
-      navigator.requestMIDIAccess().then(access => {
+      navigator.requestMIDIAccess().then((access) => {
         this.access = access;
-        this.access.onstatechange = event =>
+        this.access.onstatechange = (event) =>
           this.setState({ midiInputs: listInputs(event.currentTarget) });
         this.setState({ midiInputs: listInputs(this.access) });
       });
   }
-  handleMidiEvent = e => {
+  handleMidiEvent = (e) => {
     const { data } = e;
     if (data[0] >> 4 === 9) {
       const newState = new Set(this.state.heldPitches);
@@ -81,7 +82,7 @@ class App extends Component {
       oldInput.onmidimessage = null;
     }
     const input = this.access.inputs.get(id);
-    input.onmidimessage = e => this.handleMidiEvent(e);
+    input.onmidimessage = (e) => this.handleMidiEvent(e);
     this.setState({ midiInput: id });
   }
   onChordChanged({ chord, addToHistory = true }) {
@@ -108,8 +109,8 @@ class App extends Component {
         },
         ...(this.signal && { signal: this.signal }),
       })
-        .then(response => response.json())
-        .then(result =>
+        .then((response) => response.json())
+        .then((result) =>
           this.setState({ suggestions: result.data, suggestionsLoaded: true }),
         );
   }
@@ -135,17 +136,20 @@ class App extends Component {
           : this.state.chordHistory[0],
         s.continuation,
       );
-      const pitchSet = new Set(pitches.map(p => Note.midi(p)));
-      const pcSet = new Set(pitches.map(p => Note.midi(p) % 12));
+      const pitchSet = new Set(pitches.map((p) => Note.midi(p)));
+      const pcSet = new Set(pitches.map((p) => Note.midi(p) % 12));
       const heldPcs = this.state.heldPcs.reduce(
         (acc, v, i) => (v ? [...acc, i % 12] : acc),
         [],
       );
-      if (this.state.heldPcs.some(v => v) && heldPcs.some(v => !pcSet.has(v)))
+      if (
+        this.state.heldPcs.some((v) => v) &&
+        heldPcs.some((v) => !pcSet.has(v))
+      )
         return acc;
       if (
         this.state.heldPitches.size >= 1 &&
-        Array.from(this.state.heldPitches).some(v => !pitchSet.has(v))
+        Array.from(this.state.heldPitches).some((v) => !pitchSet.has(v))
       )
         return acc;
       return [
@@ -158,7 +162,7 @@ class App extends Component {
           currentPitches={this.state.chord}
           transpose={this.state.transpose}
           clickable={true}
-          changeChord={chord => this.onChordChanged({ chord })}
+          changeChord={(chord) => this.onChordChanged({ chord })}
           disabled={!this.state.suggestionsLoaded}
         />,
       ];
@@ -188,7 +192,7 @@ class App extends Component {
           <Devices
             midiInputs={this.state.midiInputs}
             midiInput={this.state.midiInput}
-            handleInputSelect={input => this.setMidiInput(input)}
+            handleInputSelect={(input) => this.setMidiInput(input)}
             handleDismiss={() => this.setState({ midiDeviceModal: false })}
           />
         )}
@@ -222,7 +226,7 @@ class App extends Component {
                   disabled={!this.state.chordHistory.length}
                   pitches={this.state.chord}
                   transpose={this.state.transpose}
-                  changeChord={chord => {
+                  changeChord={(chord) => {
                     this.back();
                     if (this.state.chordHistory.length < 2) {
                       this.setState({
@@ -248,18 +252,32 @@ class App extends Component {
                 },
               ])}
             >
-              {suggestions.length
-                ? suggestions
-                : this.state.suggestionsLoaded && (
-                    <div className="NoSuggestions">No suggestions found</div>
-                  )}
+              {this.state.suggestionsLoaded ? (
+                suggestions.length ? (
+                  suggestions
+                ) : (
+                  <div className="NoSuggestions">No suggestions found</div>
+                )
+              ) : (
+                <React.Fragment>
+                  {[...Array(3)].map((_, index) => (
+                    <Moment
+                      key={index}
+                      type={'next'}
+                      placeholder={true}
+                      disabled={false}
+                      clickable={false}
+                    />
+                  ))}
+                </React.Fragment>
+              )}
             </div>
           </div>
           <Keyboard
             heldPcs={this.state.heldPcs}
-            setHeldPcs={heldPcs => this.setState({ heldPcs })}
+            setHeldPcs={(heldPcs) => this.setState({ heldPcs })}
             heldPitches={this.state.heldPitches}
-            setHeldPitches={heldPitches => this.setState({ heldPitches })}
+            setHeldPitches={(heldPitches) => this.setState({ heldPitches })}
           />
           <Score
             chordHistory={this.state.chordHistory}

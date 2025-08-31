@@ -23,6 +23,7 @@ class Moment extends Component {
       clickable,
       playing,
       count,
+      placeholder,
     } = this.props;
     const {
       notes = [],
@@ -45,7 +46,8 @@ class Moment extends Component {
             disabled,
             playing,
             [type]: !disabled,
-            clickable: clickable,
+            clickable,
+            placeholder,
           },
         ])}
         style={{
@@ -81,18 +83,26 @@ class Moment extends Component {
         onMouseLeave={() => cancelAll()}
       >
         <div className="MomentContent">
-          <span className="Count">{count >= 0 && count}</span>
-          <Staff staffLines={STAFF_LINES}>
-            <Chord
-              {...{
-                notes,
-                ledgerLines,
-                width,
-                staffExtent: STAFF_EXTENT,
-                cx: 3.5,
-              }}
-            />
-          </Staff>
+          {placeholder ? (
+            <React.Fragment>
+              <div className="Placeholder" />
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <span className="Count">{count >= 0 && count}</span>
+              <Staff staffLines={STAFF_LINES}>
+                <Chord
+                  {...{
+                    notes,
+                    ledgerLines,
+                    width,
+                    staffExtent: STAFF_EXTENT,
+                    cx: 3.5,
+                  }}
+                />
+              </Staff>
+            </React.Fragment>
+          )}
         </div>
       </div>
     );
