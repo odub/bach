@@ -88,8 +88,8 @@ class Score extends Component {
           <div
             style={{
               transform: this.state.playing
-                ? 'translate(-1px, 2px) rotate(0.25turn) scale(1.25, 1.25)'
-                : 'translate(1px, 2px) rotate(0.25turn)',
+                ? 'translate(4px, 2px) rotate(0.25turn) scale(1.25, 1.25)'
+                : 'translate(2px, 2px) rotate(0.25turn)',
             }}
           >
             {this.state.playing ? '◼' : '▲'}
