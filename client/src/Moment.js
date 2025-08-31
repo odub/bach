@@ -24,13 +24,18 @@ class Moment extends Component {
       playing,
       count,
     } = this.props;
-    const { notes = [], ledgerLines, width } = this.props.pitches
+    const {
+      notes = [],
+      ledgerLines,
+      width,
+    } = this.props.pitches
       ? formatNotes({
           pitches: pitches,
           staffExtent: STAFF_EXTENT,
           transposition: this.props.transpose || '1P',
         })
       : {};
+    const height = Math.min(8, count);
 
     return (
       <div
@@ -43,6 +48,19 @@ class Moment extends Component {
             clickable: clickable,
           },
         ])}
+        style={{
+          top: -height * 2,
+          boxShadow:
+            height > 1
+              ? [...Array(height)].reduce((acc, _, i, __) => {
+                  const h = i * 2;
+                  return (
+                    (acc ? acc + ', ' : '') +
+                    `0px ${h + 1}px 0px white, 0px ${h + 2}px 0px #ccc`
+                  );
+                }, '')
+              : 'none',
+        }}
         onClick={() =>
           clickable &&
           !disabled &&
@@ -62,18 +80,20 @@ class Moment extends Component {
         }}
         onMouseLeave={() => cancelAll()}
       >
-        <span className="Count">{count >= 0 && count}</span>
-        <Staff staffLines={STAFF_LINES}>
-          <Chord
-            {...{
-              notes,
-              ledgerLines,
-              width,
-              staffExtent: STAFF_EXTENT,
-              cx: 3.5,
-            }}
-          />
-        </Staff>
+        <div className="MomentContent">
+          <span className="Count">{count >= 0 && count}</span>
+          <Staff staffLines={STAFF_LINES}>
+            <Chord
+              {...{
+                notes,
+                ledgerLines,
+                width,
+                staffExtent: STAFF_EXTENT,
+                cx: 3.5,
+              }}
+            />
+          </Staff>
+        </div>
       </div>
     );
   }
