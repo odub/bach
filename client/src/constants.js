@@ -1,23 +1,24 @@
-// Explicitly import test moment JSON files to avoid require.context resolution issues in some build environments
-const TEST_MOMENT_0 = require('./data/0.json');
-const TEST_MOMENT_1 = require('./data/1.json');
-const TEST_MOMENT_2 = require('./data/2.json');
-const TEST_MOMENT_3 = require('./data/3.json');
-const TEST_MOMENT_4 = require('./data/4.json');
-const TEST_MOMENT_5 = require('./data/5.json');
-const TEST_MOMENT_6 = require('./data/6.json');
-const TEST_MOMENT_7 = require('./data/7.json');
-const TEST_MOMENT_8 = require('./data/8.json');
-const TEST_MOMENT_9 = require('./data/9.json');
+import TEST_MOMENT_0 from './data/0.json';
+import TEST_MOMENT_1 from './data/1.json';
+import TEST_MOMENT_2 from './data/2.json';
+import TEST_MOMENT_3 from './data/3.json';
+import TEST_MOMENT_4 from './data/4.json';
+import TEST_MOMENT_5 from './data/5.json';
+import TEST_MOMENT_6 from './data/6.json';
+import TEST_MOMENT_7 from './data/7.json';
+import TEST_MOMENT_8 from './data/8.json';
+import TEST_MOMENT_9 from './data/9.json';
 
-const glyphNames = require('./assets/fonts/metadata/glyphNames.json');
+import START_POINTS_JSON from './data/startPoints.json';
+
+import glyphNames from './assets/fonts/metadata/glyphNames.json';
 
 export const API_BASE_URL =
   process.env.NODE_ENV === 'production'
     ? 'https://voice-leading.herokuapp.com'
     : 'http://localhost:4000';
 
-export const START_POINTS = require('./data/startPoints.json');
+export const START_POINTS = START_POINTS_JSON;
 export const TEST_MOMENTS = [
   TEST_MOMENT_0,
   TEST_MOMENT_1,
