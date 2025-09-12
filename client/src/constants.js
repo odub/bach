@@ -15,7 +15,7 @@ import glyphNames from './assets/fonts/metadata/glyphNames.json';
 
 export const API_BASE_URL =
   process.env.NODE_ENV === 'production'
-    ? 'https://voice-leading.herokuapp.com'
+    ? 'https://bach-server.onrender.com'
     : 'http://localhost:4000';
 
 export const START_POINTS = START_POINTS_JSON;
